@@ -1,0 +1,39 @@
+<mat-horizontal-stepper #stepper
+  [linear]="true"
+  [orientation]="(responsiveLayoutService.isMobile | async) ? 'vertical' : 'horizontal'">
+
+  <mat-step [editable]="false" [completed]="videoId !== null">
+    <ng-template matStepLabel>Prześlij plik wideo</ng-template>
+    <ng-template matStepContent>
+      <management-video-upload (videoUploaded)="videoUploaded($event, stepper)">
+      </management-video-upload>
+    </ng-template>
+  </mat-step>
+
+  <mat-step [editable]="true">
+    <ng-template matStepLabel>Szczegóły</ng-template>
+    <ng-template matStepContent>
+      <management-video-edit [standalone]="false">
+      </management-video-edit>
+
+      <mat-divider></mat-divider>
+
+      <div class="info">
+        <button mat-stroked-button matStepperNext class="button-with-icon">
+          Przejdź dalej
+        </button>
+        <div class="text">
+          Będziesz mógł zaktualizować te dane z poziomu zakładki "Moje filmy"
+        </div>
+      </div>
+    </ng-template>
+  </mat-step>
+
+  <mat-step [editable]="false">
+    <ng-template matStepLabel>Podsumowanie</ng-template>
+    <ng-template matStepContent>
+      <management-video-summary [videoId]="videoId">
+      </management-video-summary>
+    </ng-template>
+  </mat-step>
+</mat-horizontal-stepper>

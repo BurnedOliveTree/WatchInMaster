@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
+  <title layout:fragment="subject">
+    Twój film jest już gotowy
+  </title>
+
+  <th:block layout:fragment="header">
+    <!--/*@thymesVar id="videoTitle" type="java.lang.String"*/-->
+    Twój film <span th:text="${videoTitle}" style="font-style: italic;"></span> jest już gotowy
+  </th:block>
+
+  <th:block layout:fragment="content">
+    <p>
+      Witaj
+      <!--/*@thymesVar id="username" type="java.lang.String"*/-->
+      <span th:text="${username}"></span>!
+      <br>
+      Aby obejrzeć swój film, kliknij w poniższy link:
+      <br>
+      <!--/*@thymesVar id="videoLink" type="java.lang.String"*/-->
+      <a th:href="${videoLink}" th:text="${videoLink}" style="text-decoration: none; color: #f44336;"></a>
+    </p>
+  </th:block>
+</html>

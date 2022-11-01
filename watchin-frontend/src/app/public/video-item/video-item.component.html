@@ -1,0 +1,51 @@
+<div
+  class="video-item"
+  [ngClass]="{'video-item-row': displayMode === 'row', 'video-item-small': narrow$ | async}"
+  (resized)="onSizeChanged($event)"
+  [routerLink]="['/video', video.id]">
+  <div class="thumbnail">
+    <img [lazyLoad]="video.thumbnail?.location" defaultImage="/assets/placeholder/video.webp">
+    <div class="overlay">
+      <div class="length">
+        {{ video.length | formattedTime }}
+      </div>
+    </div>
+  </div>
+  <div class="details">
+    <div class="title-container">
+      <h3 class="title">{{ video.title }}</h3>
+      <video-actions
+        [videoId]="video.id"
+        [favorite]="video.favorite"
+        [watchLater]="video.watchLater"
+        (removedFromFavorite)="removedFromFavorite.emit(video)"
+        (removedFromWatchLater)="removedFromWatchLater.emit(video)">
+      </video-actions>
+    </div>
+
+    <div class="meta-wrapper" *ngVar="video.channel.name as channelName">
+      <div class="avatar">
+        <img
+          class="fadein"
+          (click)="$event.stopPropagation()"
+          [lazyLoad]="video.channel.avatar?.location"
+          [routerLink]="['/channel', channelName]">
+      </div>
+      <div class="meta">
+        <h4
+          class="channel-link"
+          (click)="$event.stopPropagation()"
+          [routerLink]="['/channel', channelName]"
+          [matTooltip]="channelName"
+          matTooltipPosition="left">
+          {{ channelName }}
+        </h4>
+        <h4>{{ video.views | number }} {{ video.views | plural:'wyświetlenie':'wyświetlenia':'wyświetleń' }}</h4>
+        <h4>{{ video.uploaded | amTimeAgo }}</h4>
+      </div>
+    </div>
+    <div class="description">
+      <p>{{ video.description ?? 'Brak opisu' }}</p>
+    </div>
+  </div>
+</div>

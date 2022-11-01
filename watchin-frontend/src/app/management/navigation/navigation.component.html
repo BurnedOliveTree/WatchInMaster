@@ -1,0 +1,20 @@
+<navigation>
+  <ng-container leftMenuContent>
+    <a mat-list-item routerLink="/management" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>home</mat-icon>
+      <span>Dashboard</span>
+    </a>
+    <a mat-list-item routerLink="/management/channel" routerLinkActive="active">
+      <mat-icon>settings</mat-icon>
+      <span>Ustawienia kanału</span>
+    </a>
+    <a mat-list-item routerLink="/management/video" routerLinkActive="active">
+      <mat-icon>video_library</mat-icon>
+      <span>Moje filmy</span>
+    </a>
+    <a mat-list-item routerLink="/">
+      <mat-icon>chevron_left</mat-icon>
+      <span>Powrót do serwisu</span>
+    </a>
+  </ng-container>
+</navigation>

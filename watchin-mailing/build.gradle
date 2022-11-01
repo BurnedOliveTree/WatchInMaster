@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+    // common
+    implementation project(':watchin-common')
+
+    // queue
+    implementation project(':watchin-queue')
+
+    // kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+    // configuration
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // mailing
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // templating
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
+    implementation 'com.yahoo.platform.yui:yuicompressor:2.4.8'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

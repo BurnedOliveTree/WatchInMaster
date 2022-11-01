@@ -1,0 +1,77 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:13.1-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "watchin"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "watchin"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:RELEASE.2021-01-30T00-20-58Z
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: "watchin"
+      MINIO_SECRET_KEY: "password"
+    volumes:
+      - minio-data:/data
+
+  redis:
+    image: redis:6.2.1-alpine3.13
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass password
+    volumes:
+      - redis-data:/data
+
+  maildev:
+    image: maildev/maildev:2.0.0-beta3
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    volumes:
+      - smtp-data:/var/lib/maildev/data
+    environment:
+      MAILDEV_SMTP_PORT: "1025"
+      MAILDEV_WEB_PORT: "1080"
+      MAILDEV_MAIL_DIRECTORY: "/var/lib/maildev/data"
+      MAILDEV_INCOMING_USER: "watchin"
+      MAILDEV_INCOMING_PASS: "password"
+
+  rabbitmq:
+    image: rabbitmq:3.9.4-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "watchin"
+      RABBITMQ_DEFAULT_PASS: "password"
+
+  prometheus:
+    image: prom/prometheus:v2.29.2
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    command: --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./dev/metrics/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/data
+
+volumes:
+  postgres-data:
+  minio-data:
+  redis-data:
+  smtp-data:
+  prometheus-data:

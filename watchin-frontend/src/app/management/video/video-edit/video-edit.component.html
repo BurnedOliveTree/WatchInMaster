@@ -1,0 +1,98 @@
+<mat-card *ngIf="standalone; else content">
+  <mat-card-content>
+    <div class="header">
+      <div class="info" [ngSwitch]="video.status">
+        <ng-container *ngSwitchCase="'PROCESSING'">
+          <div class="status-title">Ten film jest procesowany</div>
+          <div class="status-description">Wkrótce będzie gotowy do odtwarzania.</div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'PARTIALLY_READY'">
+          <div class="status-title">Ten film jest częściowo gotowy</div>
+          <div class="status-description">Jeszcze nie wszystkie źródła zostały przetworzone, jednak może on już być odtwarzany.</div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'READY'">
+          <div class="status-title">Ten film jest gotowy</div>
+          <div class="status-description">Wszystkie źródła zostały już przetworzone.</div>
+        </ng-container>
+      </div>
+
+      <div class="action">
+        <button mat-stroked-button
+                class="button-with-icon"
+                (click)="deleteVideo()">
+          <mat-icon color="accent">delete</mat-icon>
+          <span>Usuń ten film</span>
+        </button>
+        <button mat-stroked-button
+                class="button-with-icon"
+                *ngIf="video.status === 'READY' || video.status === 'PARTIALLY_READY'"
+                [routerLink]="['/video', video.id]">
+          <mat-icon color="accent">visibility</mat-icon>
+          <span>Podgląd</span>
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="content">
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<ng-template #content>
+  <management-settings-item
+    #title
+    title="Tytuł"
+    description="Dodaj tytuł, który opisuje Twój film."
+    type="text"
+    [required]="true"
+    [item]="video.title"
+    (saved)="changeTitle($event)">
+  </management-settings-item>
+
+  <mat-divider></mat-divider>
+
+  <management-settings-item
+    #description
+    title="Opis"
+    description="Opowiedz widzom o filmie."
+    type="text"
+    [item]="video.description"
+    (saved)="changeDescription($event)"
+    (deleted)="changeDescription()">
+  </management-settings-item>
+
+  <mat-divider></mat-divider>
+
+  <management-settings-item
+    title="Miniatura"
+    description="Wybierz obraz, który pokaże, czego dotyczy film."
+    type="image"
+    [item]="video.thumbnail?.location"
+    [restoreDefault]="true"
+    (saved)="changeThumbnail($event)"
+    (deleted)="changeThumbnail()">
+  </management-settings-item>
+
+  <mat-divider></mat-divider>
+
+  <management-settings-item
+    #visibility
+    title="Widoczność"
+    description="Ustaw widoczność swojego filmu."
+    type="radio"
+    [required]="true"
+    [options]="[
+      ['PRIVATE', 'Prywatny', 'Tylko Ty możesz obejrzeć ten film'],
+      ['PROTECTED', 'Niepubliczny', 'Każda osoba posiadająca bezpośredni link może obejrzeć ten film'],
+      ['PUBLIC', 'Publiczny', 'Wszyscy mogą obejrzeć Twój film']
+    ]"
+    [item]="video.visibility"
+    (saved)="changeVisibility($event)">
+  </management-settings-item>
+</ng-template>

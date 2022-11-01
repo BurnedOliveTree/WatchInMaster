@@ -1,0 +1,60 @@
+<div class="filter">
+  <mat-expansion-panel
+    [expanded]="responsiveLayoutService.isDesktop | async"
+    [ngClass]="{'mat-elevation-z0': responsiveLayoutService.isMobile | async}">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>filter_list</mat-icon>
+        <h2>Filtry</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="filter-items">
+      <div class="filter-item">
+        <div class="filter-item-title">Sortuj według</div>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let option of sortOptions">
+          <div class="filter-item-row"
+               *ngVar="filter.sort === option.value as selected"
+               [ngClass]="{'filter-item-row-selected': selected}"
+               (click)="filter.sort = selected ? null : option.value">
+            {{ option.label }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="filter-item">
+        <div class="filter-item-title">Data przesłania</div>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let option of dateOptions">
+          <div class="filter-item-row"
+               *ngVar="filter.date === option.value as selected"
+               [ngClass]="{'filter-item-row-selected': selected}"
+               (click)="filter.date = selected ? null : option.value">
+            {{ option.label }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="filter-item">
+        <div class="filter-item-title">Czas trwania</div>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let option of durationOptions">
+          <div class="filter-item-row"
+               *ngVar="filter.duration === option.value as selected"
+               [ngClass]="{'filter-item-row-selected': selected}"
+               (click)="filter.duration = selected ? null : option.value">
+            {{ option.label }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="apply">
+      <button mat-stroked-button color="primary" (click)="submit()">
+        Zastosuj
+      </button>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-divider *ngIf="responsiveLayoutService.isMobile | async"></mat-divider>
+</div>

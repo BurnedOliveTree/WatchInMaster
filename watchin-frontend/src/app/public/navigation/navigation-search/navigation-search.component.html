@@ -1,0 +1,22 @@
+<input
+  #phrase
+  #trigger="matAutocompleteTrigger"
+  class="search-input"
+  type="text"
+  placeholder="Szukaj"
+  (input)="inputChanged(phrase.value)"
+  (keydown.enter)="trigger.closePanel(); search(phrase.value)"
+  [matAutocomplete]="autocomplete">
+
+<mat-autocomplete #autocomplete="matAutocomplete"
+  (optionSelected)="search(phrase.value)">
+  <mat-option *ngFor="let option of (options$ | async)?.options" [value]="option">
+    {{ option }}
+  </mat-option>
+</mat-autocomplete>
+
+<mat-icon
+  class="search-icon"
+  (click)="search(phrase.value)">
+  search
+</mat-icon>

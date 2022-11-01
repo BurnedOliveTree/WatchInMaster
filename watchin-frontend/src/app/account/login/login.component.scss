@@ -1,0 +1,19 @@
+@import "app/account/account-layout/account-layout.component";
+
+.password-toggle {
+  cursor: pointer;
+}
+
+.forgotten-password {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 13px;
+}
+
+.register-hint {
+  text-decoration: underline;
+}
+
+.remember-me {
+  margin-top: 15px;
+}

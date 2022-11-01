@@ -1,0 +1,141 @@
+spring:
+  profiles:
+    active: dev
+
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+  session:
+    store-type: redis
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  rabbitmq:
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+logging:
+  level:
+    web: info
+
+server:
+  port: 8080
+  http2:
+    enabled: true
+
+management:
+  server:
+    port: 9080
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+    enable:
+      jvm: true
+
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+      slo:
+        http.server.requests: 100ms, 150ms, 250ms, 500ms, 1s
+
+application:
+  frontend:
+    raster-logo-path: /assets/branding/logo.png
+    vector-logo-path: /assets/branding/logo.svg
+
+  cdn:
+    avatar-path: /cdn/image/avatar/
+    background-path: /cdn/image/background/
+    thumbnail-path: /cdn/image/thumbnail/
+    video-path: /cdn/video/stream/
+
+  deep-linking:
+    activation: /account/activate/
+    password-reset: /account/reset-password/
+    video: /video/
+
+object-storage:
+  bucket-name: watchin
+  region: auto
+
+mailing:
+  enabled: true
+  protocol: smtp
+  encoding: UTF-8
+  address: noreply@watchin.com
+
+account:
+  password:
+    hashing-enabled: true
+
+  activation:
+    required: true
+    token-validity: 3d
+
+  password-reset:
+    token-validity: 3d
+
+  remember-me:
+    key: remember-me
+    token-validity: 30d
+
+  api:
+    login-path: /api/account/login
+    logout-path: /api/account/logout
+    details-path: /api/account/details
+
+queue:
+  mail-queue: mailQueue
+  video-transcoding-queue: videoTranscodingQueue
+
+scheduler:
+  shedlock:
+    redis-environment: watchin
+    min-lock-duration: 5s
+    max-lock-duration: 5m
+
+  statistics:
+    generate: 0 0 0/6 * * *
+
+  resources:
+    purge-orphans: 0 */15 * * * *
+
+file-system:
+  video-source-file-prefix: watchin_source_
+  video-transcoding-file-prefix: watchin_transcoding_
+  thumbnail-file-prefix: watchin_thumbnail_
+
+multimedia:
+  avatar:
+    size: 128
+    font-size: 72
+    font-name: fonts/Roboto-Regular.ttf
+
+  thumbnail:
+    width: 400
+    height: 225
+
+  video:
+    content-type: video/mp4
+    output-format: mp4
+    audio-codec: aac
+    audio-bit-rate: 128000
+    audio-sampling-rate: 44100
+    audio-channels: 2
+    video-codec: libx264
+    video-frame-rate: 30

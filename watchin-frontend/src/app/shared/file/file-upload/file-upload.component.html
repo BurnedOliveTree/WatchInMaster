@@ -1,0 +1,40 @@
+<div class="upload" [ngClass]="{'uploading': file}"  dragAndDrop (fileDropped)="onFileSelected($event)">
+  <div class="circle">
+    <mat-icon>cloud_upload</mat-icon>
+  </div>
+
+  <input
+    #fileInput
+    type="file"
+    accept="video/*"
+    id="fileInput"
+    hidden
+    (change)="onFileSelected(fileInput.files[0]); fileInput.value = null">
+
+  <ng-container *ngIf="!file">
+    <h2>Przeciągnij i upuść plik wideo</h2>
+    <h4>lub</h4>
+    <button mat-raised-button color="accent">
+      <label for="fileInput">Wybierz plik</label>
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="file">
+    <div class="progress">
+      <mat-icon class="file-icon">text_snippet</mat-icon>
+      <div class="file-data">
+        <div class="file-error" *ngIf="uploadError">Wystąpił błąd</div>
+        <div class="file-name">{{ file.name }}</div>
+        <div class="file-size">{{ file.size | fileSize }}</div>
+        <mat-progress-bar
+          mode="determinate"
+          [color]="uploadError ? 'accent' : 'primary'"
+          [value]="uploadProgress">
+        </mat-progress-bar>
+      </div>
+      <button mat-icon-button (click)="cancelUpload()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</div>

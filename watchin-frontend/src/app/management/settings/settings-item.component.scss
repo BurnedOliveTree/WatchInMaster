@@ -1,0 +1,135 @@
+@import "src/media-utils";
+
+:host {
+  margin-top: 48px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.settings-item {
+  display: flex;
+  flex-direction: column;
+
+  .settings-item-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .settings-item-description {
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 16px;
+    color: #e6e6e6;
+  }
+
+  .settings-item-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    width: 100%;
+
+    &-text {
+      white-space: pre-wrap;
+
+      .placeholder {
+        position: relative;
+        width: 100%;
+        height: 20px;
+
+        &::after {
+          content: 'Brak tekstu';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    &-image {
+      justify-content: center;
+      align-items: center;
+
+      image-cropper {
+        --cropper-overlay-color: rgba(0, 0, 0, 0);
+        max-height: 300px;
+        max-width: 100%;
+      }
+
+      img {
+        max-height: 300px;
+        max-width: 100%;
+
+        &.round {
+          width: 128px;
+          height: 128px;
+          border-radius: 50%;
+        }
+      }
+
+      .placeholder {
+        position: relative;
+        height: 150px;
+        width: 100%;
+        background-image: url('/assets/placeholder/video.webp');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50%;
+
+        &::after {
+          content: 'Brak obrazu';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: rgba(0, 0, 0, 0.4);
+          padding: 4px 32px;
+        }
+      }
+    }
+
+    &-radio {
+      mat-radio-group {
+        display: flex;
+        flex-direction: column;
+        margin-top: -16px;
+      }
+
+      .option {
+        display: flex;
+        flex-direction: column;
+        margin-top: 16px;
+
+        &-header {
+          font-size: 15px;
+        }
+
+        &-description {
+          font-size: 13px;
+          white-space: normal;
+        }
+      }
+    }
+  }
+
+  .settings-item-actions {
+    display: flex;
+    flex: 1 0 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .button-with-icon {
+      margin-left: 8px;
+    }
+  }
+}

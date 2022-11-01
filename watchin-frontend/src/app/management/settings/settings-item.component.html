@@ -1,0 +1,112 @@
+<div class="settings-item">
+
+  <div class="settings-item-title">
+    {{ title }} <ng-container *ngIf="required">(pole wymagane)</ng-container>
+  </div>
+
+  <div class="settings-item-description">
+    {{ description }}
+  </div>
+
+  <div class="settings-item-input settings-item-input-image" *ngIf="type === 'image'">
+    <ng-container *ngIf="!isEditMode()">
+      <img *ngIf="item; else noImage"
+        class="fadein"
+        [ngClass]="{'round': round}"
+        [lazyLoad]="item">
+
+      <ng-template #noImage>
+        <div class="placeholder"></div>
+      </ng-template>
+    </ng-container>
+
+    <image-cropper
+      *ngIf="isEditMode()"
+      format="jpeg"
+      [imageFile]="imagePreview"
+      [roundCropper]="round"
+      [aspectRatio]="aspectRatio"
+      [maintainAspectRatio]="true"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (loadImageFailed)="imageCropError()">
+    </image-cropper>
+
+    <input
+      #imageInput
+      type="file"
+      accept="image/*"
+      id="imageInput"
+      hidden
+      (change)="imageSelected(imageInput.files[0]); imageInput.value = null">
+  </div>
+
+  <div class="settings-item-input settings-item-input-text" *ngIf="type === 'text'">
+    <ng-container *ngIf="!isEditMode()">
+      <span *ngIf="item; else noText">
+        {{ item }}
+      </span>
+      <ng-template #noText>
+        <div class="placeholder"></div>
+      </ng-template>
+    </ng-container>
+
+    <mat-form-field floatLabel="never" *ngIf="isEditMode()">
+      <textarea
+        matInput
+        [mat-autosize]="true"
+        [(ngModel)]="textPreview">
+      </textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="settings-item-input settings-item-input-radio" *ngIf="type === 'radio'">
+    <mat-radio-group
+      color="primary"
+      [value]="isEditMode() ? radioPreview : item"
+      (change)="radioPreview = $event.value"
+      [disabled]="!isEditMode()">
+      <mat-radio-button *ngFor="let option of options" [value]="option[0]">
+        <div class="option">
+          <div class="option-header">
+            {{ option[1] }}
+          </div>
+          <div class="option-description">
+            {{ option[2] }}
+          </div>
+        </div>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="settings-item-actions">
+    <button mat-stroked-button class="button-with-icon"
+      *ngIf="isEditMode()"
+      (click)="cancelEdit()">
+      Anuluj
+    </button>
+
+    <button mat-stroked-button class="button-with-icon"
+      *ngIf="!isEditMode() && item && !required"
+      (click)="delete()">
+      <mat-icon color="accent">delete</mat-icon>
+      {{ restoreDefault ? 'Przywróć domyślne' : 'Usuń' }}
+    </button>
+
+    <button mat-stroked-button class="button-with-icon"
+      *ngIf="!isEditMode()"
+      (click)="edit()">
+      <mat-icon color="accent">mode_edit</mat-icon>
+      Zmień
+    </button>
+
+    <button mat-stroked-button class="button-with-icon"
+      *ngIf="isEditMode()"
+      [disabled]="!isValid()"
+      (click)="save()">
+      <ng-container *ngIf="type === 'image'">Zapisz obraz</ng-container>
+      <ng-container *ngIf="type === 'text'">Zapisz tekst</ng-container>
+      <ng-container *ngIf="type === 'radio'">Zapisz wybór</ng-container>
+    </button>
+  </div>
+</div>

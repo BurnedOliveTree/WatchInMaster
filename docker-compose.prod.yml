@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  server:
+    image: watchin-server:latest
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - minio
+      - redis
+      - maildev
+      - rabbitmq
+    ports:
+      - "80:8080"
+      - "9080:9080"
+    volumes:
+      - ./dev/mini-prod/server-properties.yml:/app/config/application-prod.yml
+
+  cdn:
+    image: watchin-cdn:latest
+    restart: unless-stopped
+    depends_on:
+      - minio
+    ports:
+      - "8081:8081"
+      - "9081:9081"
+    volumes:
+      - ./dev/mini-prod/cdn-properties.yml:/app/config/application-prod.yml

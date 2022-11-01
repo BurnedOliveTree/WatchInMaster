@@ -1,0 +1,68 @@
+.add-comment {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+
+  .avatar {
+    margin-right: 12px;
+    display: flex;
+    flex: 0 0 auto;
+
+    img {
+      outline: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+
+  .input {
+    display: flex;
+    flex: 1 1 auto;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    ::ng-deep .mat-form-field-infix {
+      border: none;
+    }
+
+    .username {
+      font-weight: 500;
+    }
+
+    &-redirect {
+      outline: none;
+      cursor: text;
+
+      * {
+        pointer-events: none;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex: 1 0 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 8px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.comment-list {
+  mat-expansion-panel {
+    margin: 0 -24px;
+  }
+
+  mat-expansion-panel-header {
+    color: #e6e6e6;
+    text-transform: uppercase;
+  }
+}

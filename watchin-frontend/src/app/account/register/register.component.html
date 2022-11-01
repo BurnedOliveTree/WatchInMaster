@@ -1,0 +1,99 @@
+<account-layout>
+  <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="inner-content">
+    <h1>Zarejestruj się</h1>
+    <h2>Rejestracja daje Ci dostęp do dodatkowych funkcji serwisu</h2>
+    <h3 class="error" *ngIf="serverError">Nieznany błąd</h3>
+
+    <div class="inner-form">
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Twoj login</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            required="required"
+            name="username"
+            [(ngModel)]="registrationData.username"
+            #usernameControl="ngModel">
+          <mat-error *ngIf="usernameControl.invalid">
+            <ng-container *ngIf="usernameControl.errors.required">Pole wymagane</ng-container>
+            <ng-container *ngIf="usernameControl.errors.server as message">{{ message }}</ng-container>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Twój e-mail</mat-label>
+          <input
+            matInput
+            type="email"
+            autocomplete="off"
+            required="required"
+            name="email"
+            [(ngModel)]="registrationData.email"
+            #emailControl="ngModel">
+          <mat-error *ngIf="emailControl.invalid">
+            <ng-container *ngIf="emailControl.errors.required">Pole wymagane</ng-container>
+            <ng-container *ngIf="emailControl.errors.server as message">{{ message }}</ng-container>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Twoje hasło</mat-label>
+          <input
+            matInput
+            [type]="passwordVisible ? 'text' : 'password'"
+            autocomplete="off"
+            required="required"
+            name="password"
+            [(ngModel)]="registrationData.password"
+            #passwordControl="ngModel">
+          <mat-icon matSuffix class="password-toggle" (click)="passwordVisible = !passwordVisible">
+            <ng-container *ngIf="passwordVisible">visibility_off</ng-container>
+            <ng-container *ngIf="!passwordVisible">visibility</ng-container>
+          </mat-icon>
+          <mat-error *ngIf="passwordControl.invalid">
+            <ng-container *ngIf="passwordControl.errors.required">Pole wymagane</ng-container>
+            <ng-container *ngIf="passwordControl.errors.server as message">{{ message }}</ng-container>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Powtórz hasło</mat-label>
+          <input
+            matInput
+            [type]="repeatedPasswordVisible ? 'text' : 'password'"
+            autocomplete="off"
+            required="required"
+            name="repeatedPassword"
+            [(ngModel)]="registrationData.repeatedPassword"
+            #repeatedPasswordControl="ngModel">
+          <mat-icon matSuffix class="password-toggle" (click)="repeatedPasswordVisible = !repeatedPasswordVisible">
+            <ng-container *ngIf="repeatedPasswordVisible">visibility_off</ng-container>
+            <ng-container *ngIf="!repeatedPasswordVisible">visibility</ng-container>
+          </mat-icon>
+          <mat-error *ngIf="repeatedPasswordControl.invalid">
+            <ng-container *ngIf="repeatedPasswordControl.errors.required">Pole wymagane</ng-container>
+            <ng-container *ngIf="repeatedPasswordControl.errors.server as message">{{ message }}</ng-container>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="submit-buttons">
+        <button mat-raised-button color="accent" type="submit" [disabled]="!registerForm.form.valid">
+          Zarejestruj się
+        </button>
+        <button mat-stroked-button color="primary" type="button" routerLink="/account/login">
+          Posiadasz już konto? <span class="login-hint">Zaloguj się</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</account-layout>

@@ -1,0 +1,21 @@
+<public-video-section
+  infinite-scroll
+  #newest="infiniteScroll"
+  [dataLoader]="newestDataLoader"
+  [pageSize]="20"
+  [pageLimit]="3"
+  [videos]="$any(newest.content)"
+  name="Najnowsze"
+  displayMode="tile">
+</public-video-section>
+
+<public-video-section
+  infinite-scroll
+  #mostPopular="infiniteScroll"
+  [dataLoader]="mostPopularDataLoader"
+  [pageSize]="20"
+  [pageLimit]="3"
+  [videos]="$any(mostPopular.content)"
+  name="Najpopularniejsze"
+  displayMode="tile">
+</public-video-section>

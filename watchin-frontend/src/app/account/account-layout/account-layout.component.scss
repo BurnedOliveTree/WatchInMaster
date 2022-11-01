@@ -1,0 +1,122 @@
+@import 'media-utils';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    flex-direction: row;
+  }
+}
+
+.branding {
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    flex-basis: 50%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    width: 100%;
+    max-width: 220px;
+    cursor: pointer;
+    outline: none;
+
+    @include desktop {
+      max-width: 250px;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex: 1 1 auto;
+  color: #fff;
+
+  @include desktop {
+    flex-basis: 50%;
+    align-items: center;
+  }
+}
+
+.inner-content {
+  margin-top: 40px;
+  margin-bottom: 20px;
+
+  @include desktop {
+    max-width: 420px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.inner-form {
+  width: 100%;
+
+  @include desktop {
+    width: 330px;
+  }
+}
+
+.form-row {
+  width: 100%;
+  margin-bottom: 15px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.submit-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  button {
+    min-height: 55px;
+    flex: 0 1 50%;
+    margin-right: 8px;
+    white-space: pre-wrap;
+    color: #fff;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 8px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 35px;
+  line-height: 35px;
+
+  @include desktop {
+    font-size: 45px;
+    line-height: 45px;
+  }
+}
+
+.error {
+  color: #f44336;
+  font-weight: 500;
+}
+
+a {
+  color: #b1b1b1;
+}

@@ -1,0 +1,25 @@
+<ng-container *ngVar="comment.channel.name as channelName">
+  <div class="avatar">
+    <img
+      class="fadein"
+      (click)="$event.stopPropagation()"
+      [lazyLoad]="comment.channel.avatar?.location"
+      [routerLink]="['/channel', channelName]">
+  </div>
+
+  <div class="content">
+    <div class="meta">
+      <h4
+        class="channel-link"
+        [routerLink]="['/channel', channelName]"
+        [matTooltip]="channelName"
+        matTooltipPosition="left">
+        {{ channelName }}
+      </h4>
+      <h4 class="comment-timestamp">{{ comment.creationDate | amTimeAgo }}</h4>
+    </div>
+    <div class="add-comment">
+      {{ comment.content }}
+    </div>
+  </div>
+</ng-container>

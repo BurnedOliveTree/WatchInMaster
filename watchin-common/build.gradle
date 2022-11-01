@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+    // configuration
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

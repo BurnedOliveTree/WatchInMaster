@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-content>
+    <management-settings-item
+      title="Zdjęcie profilowe"
+      description="Twoje zdjęcie profilowe będzie widoczne przy twoich filmach oraz komentarzach."
+      type="image"
+      [item]="channel.avatar?.location"
+      [restoreDefault]="true"
+      [round]="true"
+      [aspectRatio]="1"
+      (saved)="changeAvatar($event)"
+      (deleted)="changeAvatar()">
+    </management-settings-item>
+
+    <mat-divider></mat-divider>
+
+    <management-settings-item
+      title="Tło"
+      description="Ten obraz będzie pojawiał się na górze strony Twojego kanału."
+      type="image"
+      [item]="channel.background?.location"
+      (saved)="changeBackground($event)"
+      (deleted)="changeBackground()">
+    </management-settings-item>
+
+    <mat-divider></mat-divider>
+
+    <management-settings-item
+      #description
+      title="Opis"
+      description="Opowiedz o swoim kanale. Opis pojawi się w sekcji informacyjnej Twojego kanału."
+      type="text"
+      [item]="channel.description"
+      (saved)="changeDescription($event)"
+      (deleted)="changeDescription()">
+    </management-settings-item>
+  </mat-card-content>
+</mat-card>

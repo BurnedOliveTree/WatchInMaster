@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8081
+  http2:
+    enabled: true
+
+management:
+  server:
+    port: 9081
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+    enable:
+      jvm: true
+
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+      slo:
+        http.server.requests: 100ms, 150ms, 250ms, 500ms, 1s
+
+logging:
+  level:
+    software.amazon.awssdk.http.nio.netty.internal.ResponseHandler: error
+
+streaming:
+  max-chunk-size: 4MB
+
+object-storage:
+  bucket-name: watchin
+  region: auto

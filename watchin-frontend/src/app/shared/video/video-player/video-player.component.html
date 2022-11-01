@@ -1,0 +1,38 @@
+<ng-content select="video-player-source"></ng-content>
+
+<div class="player-container" #rootContainer>
+  <div class="player-aspect-ratio">
+    <video #video
+      [muted]="muted"
+      (play)="onPlaybackStateChanged(true)"
+      (pause)="onPlaybackStateChanged(false)"
+      (ended)="onPlaybackStateChanged(false)"
+      (timeupdate)="onContentPositionChanged(video.currentTime)"
+      (loadedmetadata)="onContentLengthChanged(video.duration)"
+      (durationchange)="onContentLengthChanged(video.duration)"
+      (volumechange)="onVolumeLevelChanged(video.volume, video.muted)"
+      (progress)="onBufferingProgress(video.buffered)"
+      (waiting)="onBufferingEvent(true)"
+      (playing)="onBufferingEvent(false)">
+    </video>
+
+    <video-player-controls
+      [playing]="videoPlaying"
+      [buffering]="videoBuffering"
+      [contentPosition]="videoContentPosition"
+      [contentLength]="videoContentLength"
+      [volumeLevel]="videoVolumeLevel"
+      [muted]="videoMuted"
+      [buffered]="videoBuffered"
+      [availableSources]="availableVideoSources?.names()"
+      [selectedSource]="selectedVideoSource?.name"
+      [fullscreen]="fullscreen"
+      (playbackStateChangeRequest)="changePlaybackState($event)"
+      (volumeLevelChangeRequest)="changeVolumeLevel($event)"
+      (muteStateChangeRequest)="changeMuteState($event)"
+      (seekRequest)="seekTo($event)"
+      (sourceChangeRequest)="changeSource($event)"
+      (fullscreenStateChangeRequest)="changeFullscreenState($event)">
+    </video-player-controls>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div *blockUI="'video-table'">
+
+  <mat-form-field appearance="standard">
+    <mat-label>Wyszukaj po tytule</mat-label>
+    <input autocomplete="off" matInput #input>
+  </mat-form-field>
+
+  <mat-table class="mat-elevation-z0"
+             [dataSource]="dataSource"
+             matSort
+             matSortActive="uploaded"
+             matSortDirection="desc"
+             matSortStart="desc">
+
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Tytuł</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        <span [matTooltip]="video.title">
+          {{ video.title | truncate:30 }}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Opis</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        <span *ngVar="video.description ?? 'Brak opisu' as description" [matTooltip]="description">
+          {{ description | truncate:15 }}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="length">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Czas trwania</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        {{ video.length | formattedTime }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="uploaded">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Data utworzenia</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        {{ video.uploaded | date:'d MMMM y' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="views">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Liczba wyświetleń</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        {{ video.views | number }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="visibility">
+      <mat-header-cell *matHeaderCellDef>Widoczność</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        <ng-container *ngIf="video.visibility === 'PUBLIC'">Publiczny</ng-container>
+        <ng-container *ngIf="video.visibility === 'PROTECTED'">Niepubliczny</ng-container>
+        <ng-container *ngIf="video.visibility === 'PRIVATE'">Prywatny</ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        <ng-container *ngIf="video.status === 'PROCESSING'">Procesowanie</ng-container>
+        <ng-container *ngIf="video.status === 'PARTIALLY_READY'">Częściowo gotowy</ng-container>
+        <ng-container *ngIf="video.status === 'READY'">Gotowy</ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="thumbnail">
+      <mat-header-cell *matHeaderCellDef>Miniatura</mat-header-cell>
+      <mat-cell *matCellDef="let video">
+        <img class="thumbnail" [lazyLoad]="video.thumbnail?.location" defaultImage="assets/placeholder/video.webp">
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="(responsiveLayoutService.isDesktop | async) ? displayedColumns : mobileDisplayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: (responsiveLayoutService.isDesktop | async) ? displayedColumns : mobileDisplayedColumns"
+             [routerLink]="['edit', row.id]">
+    </mat-row>
+
+  </mat-table>
+
+  <mat-paginator [length]="dataSource.count$ | async"
+                 [pageSize]="8"
+                 [pageSizeOptions]="[5, 8, 15, 30]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

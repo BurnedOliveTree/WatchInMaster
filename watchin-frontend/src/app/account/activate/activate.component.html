@@ -1,0 +1,23 @@
+<account-layout>
+  <div class="inner-content">
+    <ng-container *ngIf="!token">
+      <h1>Aktywuj konto</h1>
+      <h2>Na twój adres e-mail podany podczas rejestracji wysłana została wiadomość aktywacyjna</h2>
+    </ng-container>
+
+    <ng-container *ngIf="activationSuccess">
+      <h1>Twoje konto zostało aktywowane</h1>
+      <h2><a routerLink="/account/login">Zaloguj się</a>, aby rozpocząć korzystanie z serwisu</h2>
+    </ng-container>
+
+    <ng-container *ngIf="activationError">
+      <h1>Twoje konto nie zostało aktywowane</h1>
+      <h2 class="error">Kod aktywacyjny jest błędny lub wygasł</h2>
+    </ng-container>
+
+    <ng-container *ngIf="serverError">
+      <h1>Twoje konto nie zostało aktywowane</h1>
+      <h2 class="error">Wystąpił nieznany błąd</h2>
+    </ng-container>
+  </div>
+</account-layout>

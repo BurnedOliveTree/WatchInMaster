@@ -1,0 +1,110 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.channel {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.08);
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+
+  img {
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+    overflow: hidden;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 4px 0 16px;
+  z-index: 1;
+
+  .avatar {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 12px;
+
+    img {
+      outline: none;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid #FFFFFF;
+      background-color: #FFFFFF;
+      cursor: pointer;
+    }
+  }
+
+  .name {
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0 6px;
+    margin: 0;
+    font-size: 22px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+  }
+}
+
+.content {
+  margin-top: -12px;
+  padding: 0 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .content-item {
+    color: #e6e6e6;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &-link {
+      cursor: pointer;
+
+      &:hover {
+        color: #FFFFFF;
+        outline: none;
+      }
+    }
+
+    &-unsubscribe {
+      color: #ff6d63;
+
+      &:hover {
+        color: #f44336;
+      }
+    }
+  }
+}
+
+

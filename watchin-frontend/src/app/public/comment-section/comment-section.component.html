@@ -1,0 +1,57 @@
+<ng-container *ngIf="authenticationService.currentAccount | async as account; else notAuthenticated">
+  <div
+    *blockUI="'comment'"
+    class="add-comment">
+    <div class="avatar">
+      <img [lazyLoad]="account?.avatar?.location" alt="Avatar">
+    </div>
+    <div class="input">
+      <mat-form-field floatLabel="never">
+        <mat-label>
+          Komentujesz publicznie jako <span class="username">{{ account.username }}</span>
+        </mat-label>
+        <textarea matInput #input [mat-autosize]="true"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="actions" *ngIf="input.value">
+      <button mat-stroked-button (click)="input.value = ''">Anuluj</button>
+      <button mat-flat-button color="accent" (click)="addComment(input.value); input.value = ''">Skomentuj</button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notAuthenticated>
+  <div class="add-comment">
+    <div class="avatar">
+      <img src="/assets/placeholder/avatar.webp" alt="Avatar">
+    </div>
+    <div class="input input-redirect" routerLink="/account/login">
+      <mat-form-field floatLabel="never">
+        <mat-label>
+          Zaloguj się, aby dodać komentarz
+        </mat-label>
+        <textarea matInput [mat-autosize]="true"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
+<div class="comment-list">
+  <mat-expansion-panel
+    class="mat-elevation-z0"
+    [expanded]="responsiveLayoutService.isDesktop | async">
+    <mat-expansion-panel-header *ngIf="comments.content">
+      {{ comments.totalElements | number }} {{ comments.totalElements | plural:'komentarz':'komentarze':'komentarzy' }}
+    </mat-expansion-panel-header>
+    <div
+      infinite-scroll
+      #comments="infiniteScroll"
+      [dataLoader]="commentDataLoader"
+      [pageSize]="10">
+      <public-comment
+        *ngFor="let comment of comments.content"
+        [comment]="comment">
+      </public-comment>
+    </div>
+  </mat-expansion-panel>
+</div>

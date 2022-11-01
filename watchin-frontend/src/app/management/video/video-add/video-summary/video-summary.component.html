@@ -1,0 +1,43 @@
+<div class="center">
+  <ng-container *ngIf="videoStatus === 'PROCESSING'">
+    <mat-progress-spinner
+      color="accent"
+      mode="indeterminate">
+    </mat-progress-spinner>
+
+    <div class="text">
+      <div class="status-title">Twój film jest procesowany</div>
+      <div class="status-description">Wkrótce będzie gotowy do odtwarzania</div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="videoStatus === 'PARTIALLY_READY'">
+    <mat-icon class="big-icon">task_alt</mat-icon>
+
+    <div class="text">
+      <div class="status-title">Gratulacje! Twój film już może być odtwarzany</div>
+      <div class="status-description">Jeszcze nie wszystkie źródła zostały przetworzone</div>
+      <button mat-stroked-button
+              class="button-with-icon"
+              [routerLink]="['/video', videoId]">
+        <mat-icon color="accent">visibility</mat-icon>
+        <span>Zobacz film</span>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="videoStatus === 'READY'">
+    <mat-icon class="big-icon">task_alt</mat-icon>
+
+    <div class="text">
+      <div class="status-title">Gratulacje! Twój film jest już gotowy</div>
+      <div class="status-description">Wszystkie źródła zostały już przetworzone</div>
+      <button mat-stroked-button
+              class="button-with-icon"
+              [routerLink]="['/video', videoId]">
+        <mat-icon color="accent">visibility</mat-icon>
+        <span>Zobacz film</span>
+      </button>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,169 @@
+@import 'media-utils';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.top-bar {
+  justify-content: space-between;
+  position: relative;
+}
+
+.top-bar-region {
+  display: flex;
+  flex: 0 1 0;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+
+  @include desktop {
+    flex-basis: 300px;
+  }
+
+  &-full {
+    flex: 1 1 100%;
+  }
+
+  &:first-child {
+    justify-content: flex-start;
+  }
+
+  &:last-child {
+    margin-right: 0;
+    justify-content: flex-end;
+  }
+}
+
+.menu-button {
+  margin-right: 12px;
+}
+
+.logo {
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+}
+
+img.avatar {
+  cursor: pointer;
+  outline: none;
+  border-radius: 50%;
+}
+
+.authenticated {
+  display: flex;
+
+  .avatar {
+    width: 32px;
+  }
+}
+
+.menu-account {
+  display: flex;
+  padding: 16px;
+
+  .avatar {
+    width: 40px;
+    margin-right: 16px;
+  }
+
+  .account-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+
+    .account-details-username {
+      font-size: 16px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .account-details-email {
+      font-size: 14px;
+      font-weight: 400;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+::ng-deep .mat-menu-panel {
+  width: 300px;
+  max-width: 300px !important;
+  margin-top: 10px;
+
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+}
+
+.not-authenticated {
+  display: flex;
+
+  login-button {
+    display: none;
+
+    @include desktop {
+      display: flex;
+    }
+  }
+
+  .login-icon {
+    cursor: pointer;
+
+    @include desktop {
+      display: none;
+    }
+  }
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.nav-list {
+  padding-top: 0;
+}
+
+.mat-list-item {
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 22px;
+    margin: 0 20px 0 4px;
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 500;
+
+    mat-icon {
+      color: #f44336;
+    }
+  }
+}
+
+.content-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}

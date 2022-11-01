@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+}
+
+mat-progress-spinner {
+  margin: 10px;
+}
+
+.text {
+  margin-top: 10px;
+
+  .status-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .status-description {
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 16px;
+    color: #e6e6e6;
+  }
+}

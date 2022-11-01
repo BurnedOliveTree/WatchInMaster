@@ -1,0 +1,9 @@
+rootProject.name = 'WatchIN'
+
+include 'watchin-server'
+include 'watchin-cdn'
+include 'watchin-objectstorage'
+include 'watchin-mailing'
+include 'watchin-common'
+include 'watchin-media'
+include 'watchin-queue'

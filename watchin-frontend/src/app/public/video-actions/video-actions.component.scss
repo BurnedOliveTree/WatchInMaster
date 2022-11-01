@@ -1,0 +1,17 @@
+:host {
+  cursor: pointer;
+}
+
+.title-action {
+  line-height: 20px;
+  color: #bfbfbf;
+
+  &:hover {
+    color: #FFFFFF;
+  }
+}
+
+::ng-deep .action-menu-item {
+  display: flex;
+  align-items: center;
+}

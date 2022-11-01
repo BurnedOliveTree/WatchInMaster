@@ -1,0 +1,12 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+
+    livereload:
+      enabled: false
+
+object-storage:
+  location: http://localhost:9000
+  access-key: watchin
+  secret-key: password

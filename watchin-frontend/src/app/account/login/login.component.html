@@ -1,0 +1,70 @@
+<account-layout>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="inner-content">
+    <h1>Zaloguj się</h1>
+    <h2>Wprowadź swój login oraz hasło aby kontynuować</h2>
+    <h3 class="error" *ngIf="incorrectCredentialsError">Niepoprawne dane logowania</h3>
+    <h3 class="error" *ngIf="accountNotActivatedError">Konto nie zostało aktywowane</h3>
+    <h3 class="error" *ngIf="serverError">Nieznany błąd</h3>
+
+    <div class="inner-form">
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Twoj login</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            required="required"
+            name="username"
+            [(ngModel)]="username"
+            #input="ngModel">
+          <mat-error *ngIf="input.invalid">
+            Pole wymagane
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Twoje hasło</mat-label>
+          <input
+            matInput
+            [type]="passwordVisible ? 'text' : 'password'"
+            autocomplete="off"
+            required="required"
+            name="password"
+            [(ngModel)]="password"
+            #input="ngModel">
+          <mat-icon matSuffix class="password-toggle" (click)="setPasswordVisibility(!passwordVisible)">
+            <ng-container *ngIf="passwordVisible">visibility_off</ng-container>
+            <ng-container *ngIf="!passwordVisible">visibility</ng-container>
+          </mat-icon>
+          <mat-error *ngIf="input.invalid">
+            Pole wymagane
+          </mat-error>
+        </mat-form-field>
+
+        <div class="forgotten-password">
+          <a routerLink="/account/forgotten-password">Nie pamiętasz hasła?</a>
+        </div>
+
+        <mat-checkbox
+          class="remember-me"
+          name="rememberMe"
+          [(ngModel)]="rememberMe">
+          Zapamiętaj mnie
+        </mat-checkbox>
+      </div>
+
+      <div class="submit-buttons">
+        <button mat-raised-button color="accent" type="submit" [disabled]="!loginForm.form.valid">
+          Zaloguj się
+        </button>
+        <button mat-stroked-button color="primary" type="button" routerLink="/account/register">
+          Nie posiadasz konta? <span class="register-hint">Zarejestruj się</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</account-layout>

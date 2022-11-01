@@ -1,0 +1,188 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    ext {
+        npmExecutable = (Os.isFamily(Os.FAMILY_WINDOWS)) ? 'npm.cmd' : 'npm'
+        frontendDir = "${rootProject.projectDir}/watchin-frontend"
+        frontendDist = "$frontendDir/dist/watchin-frontend"
+        frontendLibs = "$frontendDir/node_modules"
+        frontendGeneratedDir = "$frontendDir/generated"
+
+        spring_boot_version = '2.4.5'
+        kotlin_version = '1.6.10'
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath 'cz.habarta.typescript-generator:typescript-generator-gradle-plugin:2.29.814'
+        classpath 'org.hibernate.orm:hibernate-gradle-plugin:6.0.0.Alpha6'
+        classpath 'gradle.plugin.org.flywaydb:gradle-plugin-publishing:7.14.0'
+    }
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'kotlin-spring'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'pw.edu.watchin'
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11
+        }
+    }
+
+    tasks.withType(JavaCompile).all {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    dependencies {
+        // spring boot
+        implementation 'org.springframework.boot:spring-boot-starter'
+
+        // configuration
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // development
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    }
+
+    compileJava.dependsOn(processResources)
+    compileKotlin.dependsOn(processResources)
+}
+
+task resolveDependencies(type: Task) {
+    description 'Downloads dependencies for offline use'
+
+    doLast {
+        allprojects {
+            configurations.getAsMap().each { name, config ->
+                if (name != "default" && config.canBeResolved) {
+                    println "Resolving dependencies for $name"
+                    config.resolve()
+                }
+            }
+        }
+    }
+}
+
+task generateDTO {
+    group 'Frontend'
+    description 'Generates frontend DTO classes based on server specification'
+}
+
+task installFrontend(type: Exec) {
+    group 'Frontend'
+    description 'Installs frontend libraries and performs code generation'
+    workingDir frontendDir
+    commandLine npmExecutable, 'install'
+    dependsOn generateDTO
+}
+
+task buildFrontend(type: Exec) {
+    group 'Frontend'
+    description 'Builds frontend'
+    workingDir frontendDir
+    commandLine npmExecutable, 'run', 'build:prod'
+    dependsOn installFrontend
+}
+
+task deployFrontend {
+    group 'Frontend'
+    description 'Deploys frontend to resources'
+    dependsOn buildFrontend
+}
+
+task cleanFrontend(type: Delete) {
+    group 'Frontend'
+    description 'Removes frontend libraries and generated code'
+    delete frontendDist
+    delete frontendLibs
+}
+
+task dockerBuild {
+    group 'Docker'
+    description 'Packages application modules into Docker images'
+}
+
+task devComposeBuild(type: Exec) {
+    group 'Docker'
+    description 'Builds development Docker images'
+    executable 'docker-compose'
+    args 'build'
+}
+
+task devComposeStart(type: Exec) {
+    group 'Docker'
+    description 'Launches development Docker containers, creating them if necessary'
+    executable 'docker-compose'
+    args 'up', '--detach'
+}
+
+task devComposeStop(type: Exec) {
+    group 'Docker'
+    description 'Stops development Docker containers'
+    executable 'docker-compose'
+    args 'stop'
+}
+
+task devComposeDown(type: Exec) {
+    group 'Docker'
+    description 'Removes development Docker containers, including data persisted in the volumes'
+    executable 'docker-compose'
+    args 'down', '--volumes', '--remove-orphans'
+}
+
+task prodComposeStart(type: Exec) {
+    group 'Docker'
+    description 'Launches production-like Docker containers, creating them if necessary'
+    executable 'docker-compose'
+    args '-f', 'docker-compose.yml'
+    args '-f', 'docker-compose.prod.yml'
+    args 'up', '--detach'
+}
+
+task prodComposeStop(type: Exec) {
+    group 'Docker'
+    description 'Stops production-like Docker containers'
+    executable 'docker-compose'
+    args '-f', 'docker-compose.yml'
+    args '-f', 'docker-compose.prod.yml'
+    args 'stop'
+}
+
+task prodComposeDown(type: Exec) {
+    group 'Docker'
+    description 'Removes production-like Docker containers, including data persisted in the volumes'
+    executable 'docker-compose'
+    args '-f', 'docker-compose.yml'
+    args '-f', 'docker-compose.prod.yml'
+    args 'down', '--volumes', '--remove-orphans'
+}

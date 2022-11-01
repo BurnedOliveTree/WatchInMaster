@@ -1,0 +1,38 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+watchin-frontend/node_modules
+watchin-frontend/generated
+watchin-frontend/dist
+
+### JetBrains ###
+.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+**/out/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### Gradle ###
+.gradle
+**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+

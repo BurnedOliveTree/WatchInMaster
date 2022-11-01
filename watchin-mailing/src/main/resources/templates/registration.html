@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
+  <title layout:fragment="subject">
+    Potwierdź swoje konto WatchIN
+  </title>
+
+  <th:block layout:fragment="header">
+    Dziękujemy za rejestrację w serwisie WatchIN
+  </th:block>
+
+  <th:block layout:fragment="content">
+    <p>
+      Witaj
+      <!--/*@thymesVar id="username" type="java.lang.String"*/-->
+      <span th:text="${username}"></span>!
+      <br>
+      Aby dokończyć proces rejestacji swojego konta, kliknij w poniższy link:
+      <br>
+      <!--/*@thymesVar id="activationLink" type="java.lang.String"*/-->
+      <a th:href="${activationLink}" th:text="${activationLink}" style="text-decoration: none; color: #f44336;"></a>
+    </p>
+  </th:block>
+</html>

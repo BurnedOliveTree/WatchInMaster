@@ -1,0 +1,41 @@
+@import "media-utils";
+
+$player-width-ratio: 16;
+$player-height-ratio: 9;
+$player-ratio: $player-width-ratio / $player-height-ratio;
+
+.player-container {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.player-aspect-ratio {
+  padding-top: min(100vh, #{100% / $player-ratio});
+  position: relative;
+
+  .player-container:fullscreen & {
+    @include mobile {
+      @media (orientation: portrait) {
+        transform: rotate(-90deg);
+        transform-origin: left top;
+        width: 100vh;
+        height: 100vw;
+        overflow-x: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+      }
+    }
+  }
+}
+
+video, video-player-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}

@@ -1,0 +1,45 @@
+@import "media-utils";
+
+:host {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+}
+
+.subscribed-channels {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 -8px -8px -8px;
+
+  public-subscribed-channel {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    overflow: hidden;
+
+    @include mobile {
+      flex-basis: 50%;
+    }
+
+    @include small-mobile {
+      flex-basis: 100%;
+    }
+
+    @include desktop {
+      flex-basis: calc(100% / 3);
+    }
+
+    @include large-desktop {
+      flex-basis: 25%;
+    }
+  }
+}
+
+.subscribed-channels-empty {
+  margin: 0;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  min-height: 76px;
+}

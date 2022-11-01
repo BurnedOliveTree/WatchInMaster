@@ -1,0 +1,92 @@
+<div class="container">
+  <mat-toolbar class="top-bar">
+    <div class="top-bar-region">
+      <button
+        class="menu-button"
+        type="button"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <img class="logo fadein" routerLink="/" lazyLoad="/assets/branding/logo.svg" alt="WatchIN logo">
+    </div>
+
+    <ng-content select="[topBarContent]"></ng-content>
+
+    <div class="top-bar-region">
+      <div
+        *ngIf="authenticationService.currentAccount | async as account; else notAuthenticated"
+        class="authenticated">
+        <img class="avatar fadein" alt="Avatar"
+          [lazyLoad]="account?.avatar?.location"
+          [matMenuTriggerFor]="menu">
+        <mat-menu
+          #menu="matMenu">
+          <div class="menu-account">
+            <img class="avatar" alt="Avatar" [src]="account?.avatar?.location">
+            <div class="account-details">
+              <div class="account-details-username">{{ account.username }}</div>
+              <div class="account-details-email">{{ account.email }}</div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <button
+            mat-menu-item
+            routerLink="/management">
+            <mat-icon>account_circle</mat-icon>
+            <span>Panel użytkownika</span>
+          </button>
+          <button
+            mat-menu-item
+            routerLink="/management/video/add">
+            <mat-icon>video_call</mat-icon>
+            <span>Dodaj nowy film</span>
+          </button>
+          <button
+            mat-menu-item
+            [routerLink]="['/channel', account.username]">
+            <mat-icon>video_library</mat-icon>
+            <span>Mój kanał</span>
+          </button>
+          <button
+            mat-menu-item
+            routerLink="/account/logout">
+            <mat-icon>logout</mat-icon>
+            <span>Wyloguj się</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <ng-template #notAuthenticated>
+        <div class="not-authenticated">
+          <login-button></login-button>
+          <mat-icon
+            class="login-icon"
+            routerLink="/account/login">
+            account_circle
+          </mat-icon>
+        </div>
+      </ng-template>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer
+      class="sidenav"
+      [attr.role]="(responsiveLayoutService.isMobile | async) ? 'dialog' : 'navigation'"
+      [mode]="(responsiveLayoutService.isMobile | async) ? 'over' : 'side'"
+      [opened]="responsiveLayoutService.isDesktop | async">
+      <mat-nav-list
+        class="nav-list"
+        (click)="drawer.toggle(drawer.mode === 'side')">
+        <ng-content select="[leftMenuContent]"></ng-content>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

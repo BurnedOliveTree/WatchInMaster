@@ -1,0 +1,24 @@
+<ng-container *ngIf="authenticationService.isAuthenticated | async; else notAuthenticated">
+  <public-video-section
+    infinite-scroll
+    #favorite="infiniteScroll"
+    [dataLoader]="favoriteDataLoader"
+    [pageSize]="20"
+    [videos]="$any(favorite.content)"
+    (removedFromFavorite)="favorite.remove($event)"
+    name="Ulubione"
+    displayMode="tile">
+    <ng-container noVideosAvailable>
+      <h3>Rozpocznij od polubienia filmów, aby pojawiły się w tej sekcji</h3>
+    </ng-container>
+  </public-video-section>
+</ng-container>
+
+<ng-template #notAuthenticated>
+  <div class="center padded-container">
+    <mat-icon class="big-icon">favorite</mat-icon>
+    <h1>Zobacz swoje ulubione filmy</h1>
+    <h3>Zaloguj się, aby mieć dostęp do swoich ulubionych filmów</h3>
+    <login-button></login-button>
+  </div>
+</ng-template>

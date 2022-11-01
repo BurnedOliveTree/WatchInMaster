@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta name="x-apple-disable-message-reformatting">
+  <title layout:fragment="subject">SUBJECT</title>
+  <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+  </style>
+</head>
+
+<!--/* CSS needs to be inlined in order to support a wide range of mail clients */-->
+<body width="100%" bgcolor="#303030" border="0"
+      style="font-family: Roboto, 'Helvetica Neue', sans-serif; font-weight: 400; font-size: 15px; line-height: 1.3em; margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important;">
+  <table bgcolor="#303030" width="100%" align="center" height="220" cellpadding="0" cellspacing="0" border="0"
+         style="border-spacing: 0; border-collapse: collapse;">
+    <tr style="border-spacing: 0; border-collapse: collapse;">
+      <td style="padding: 0 2.5em; border-spacing: 0; border-collapse: collapse;">
+        <table style="max-width: 900px; border-spacing: 0; border-collapse: collapse;" width="100%" height="220" cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr width="100%" style="max-width: 900px; margin: 0 auto; border-spacing: 0; border-collapse: collapse;">
+            <td style="padding: 20px 0; border-spacing: 0; border-collapse: collapse;">
+              <!--/*@thymesVar id="logoUrl" type="java.lang.String"*/-->
+              <img th:src="${logoUrl}"
+                   alt="WatchIN logo" width="250px"
+                   style="display: block; float: left; margin: 40px 0 30px 0; color: #ffffff; font-size: 20px;">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff"
+         style="margin: 0 auto; padding: 50px 0; width: 100%; border: 0; border-spacing: 0; border-collapse: collapse;">
+    <tr style="border-spacing: 0; border-collapse: collapse;">
+      <td style="background: #ffffff; padding: 40px 2.5em; border-collapse: collapse; border-spacing: 0;" valign="middle">
+        <table style="max-width: 900px; margin: 0 auto; border-spacing: 0; table-layout: auto; border-collapse: collapse;"
+               border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
+          <tr style="border-spacing: 0; border-collapse: collapse;">
+            <td style="border-spacing: 0; border-collapse: collapse;">
+              <div style="color: #292929;">
+                <h2 style="color: #292929; font-size: 40px; font-weight: 500; line-height: 1; margin-top: 0; margin-bottom: 30px;">
+                  <th:block layout:fragment="header">HEADER</th:block>
+                </h2>
+                <th:block layout:fragment="content">CONTENT</th:block>
+                <p style="margin-top: 30px; margin-bottom: 0;">
+                  Pozdrawiamy,<br>
+                  Zespół WatchIN
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#303030" width="100%"
+         style="border-spacing: 0; border-collapse: collapse;">
+    <tr style="border-spacing: 0; border-collapse: collapse;">
+      <td style="padding: 2.5em; border-spacing: 0; border-collapse: collapse;" valign="middle">
+        <table style="max-width: 900px; margin: 0 auto; border-spacing: 0; border-collapse: collapse;" width="100%"
+               align="center">
+          <tr style="border-spacing: 0; border-collapse: collapse;">
+            <td style="padding-top: 20px; border-spacing: 0; border-collapse: collapse;" valign="top" align="left">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" align="left"
+                     style="border-spacing: 0; border-collapse: collapse;">
+                <tr style="border-spacing: 0; border-collapse: collapse;">
+                  <td style="text-align: left; color: #ffffff; border-spacing: 0; border-collapse: collapse;">
+                    <p>
+                      Wysłane przez <span style="font-weight: 500">WatchIN</span>
+                      <br>
+                      <!--/*@thymesVar id="frontendUrl" type="java.lang.String"*/-->
+                      <a th:href="${frontendUrl}" th:text="${frontendUrl}" style="text-decoration: none; color: #f44336;">FOOTER_LINK</a>
+                    </p>
+                    <p style="font-size: 12px;">
+                      Wiadomość wygenerowana automatycznie, prosimy nie odpowiadać
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

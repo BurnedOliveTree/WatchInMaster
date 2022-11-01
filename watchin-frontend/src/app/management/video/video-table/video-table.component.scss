@@ -1,0 +1,19 @@
+@import 'media-utils';
+
+mat-table {
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+mat-row {
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.thumbnail {
+  height: 50px;
+  margin: 10px 0;
+}

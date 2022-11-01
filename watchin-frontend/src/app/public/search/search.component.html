@@ -1,0 +1,17 @@
+<public-video-section
+  infinite-scroll
+  #search="infiniteScroll"
+  [dataLoader]="searchDataLoader"
+  [pageSize]="10"
+  [filter]="filter"
+  [videos]="$any(search.content)"
+  [name]="header"
+  displayMode="row">
+  <ng-container noVideosAvailable>
+    <h3>Brak wyników spełniających kryteria</h3>
+  </ng-container>
+</public-video-section>
+
+<public-video-filter
+  (filterSaved)="updateFilter($event)">
+</public-video-filter>

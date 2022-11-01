@@ -1,0 +1,50 @@
+<ng-container *ngIf="authenticationService.isAuthenticated | async; else notAuthenticated">
+  <mat-tab-group
+    [dynamicHeight]="true"
+    (selectedTabChange)="$event.tab === channelsTab ? subscribedChannels.reload().subscribe() : videosFromSubscribedChannels.reload().subscribe()">
+    <mat-tab label="Kanały" #channelsTab>
+      <mat-card>
+        <mat-card-content>
+          <h3 class="subscribed-channels-empty"
+              *ngIf="subscribedChannels?.content?.length === 0">
+            Nie subskrybujesz jeszcze żadnych kanałów
+          </h3>
+          <div class="subscribed-channels"
+               infinite-scroll
+               #subscribedChannels="infiniteScroll"
+               [dataLoader]="channelsDataLoader"
+               [pageSize]="20">
+            <public-subscribed-channel
+              *ngFor="let channel of subscribedChannels.content"
+              [channel]="channel"
+              (unsubscribed)="subscribedChannels.remove($event)">
+            </public-subscribed-channel>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab label="Najnowsze filmy">
+      <public-video-section
+        infinite-scroll
+        #videosFromSubscribedChannels="infiniteScroll"
+        [dataLoader]="videosDataLoader"
+        [pageSize]="20"
+        [pageLimit]="3"
+        [videos]="$any(videosFromSubscribedChannels.content)">
+        <ng-container noVideosAvailable>
+          <h3>Nie są dostępne żadne nowe filmy</h3>
+        </ng-container>
+      </public-video-section>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>
+
+<ng-template #notAuthenticated>
+  <div class="center padded-container">
+    <mat-icon class="big-icon">stars</mat-icon>
+    <h1>Zobacz najnowsze filmy z interesujących cię kanałów</h1>
+    <h3>Zaloguj się, aby kontynuować</h3>
+    <login-button></login-button>
+  </div>
+</ng-template>

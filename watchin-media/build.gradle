@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+    // common
+    implementation project(':watchin-common')
+
+    // configuration
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // jave2
+    compile 'ws.schild:jave-all-deps:3.1.1'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

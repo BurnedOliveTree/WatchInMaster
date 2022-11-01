@@ -1,0 +1,132 @@
+<div class="video">
+  <mat-card>
+    <video-player [muted]="true" [autoplay]="true">
+      <video-player-source
+        *ngFor="let source of video?.resources; let first = first"
+        [url]="source.resource.location"
+        [name]="source.quality.friendlyName"
+        [default]="first">
+      </video-player-source>
+    </video-player>
+
+    <div class="info">
+      <button *ngIf="(authenticationService.currentAccount | async)?.username === video.channel.name"
+              [routerLink]="['/management/video/edit', video.id]"
+              class="edit-button button-with-icon"
+              mat-stroked-button
+              color="primary">
+        <mat-icon color="accent">edit</mat-icon>
+        <span>Edytuj</span>
+      </button>
+
+      <div class="title-row">
+        <mat-icon *ngIf="video.visibility === 'PRIVATE'"
+          matTooltip="Ten film jest prywatny. Tylko Ty możesz go obejrzeć."
+          matTooltipPosition="right">lock</mat-icon>
+        <mat-icon *ngIf="video.visibility === 'PROTECTED'"
+          matTooltip="Ten film jest niepubliczny. Jedynie osoby posiadające bezpośredni link mogą go obejrzeć."
+          matTooltipPosition="right">lock</mat-icon>
+        <h1 class="title">
+          {{ video.title }}
+        </h1>
+      </div>
+
+      <div class="info-row">
+        <div class="info-row-item">
+          <h4>{{ video.views | number }} {{ video.views | plural:'wyświetlenie':'wyświetlenia':'wyświetleń' }}</h4>
+          <mat-divider vertical="true"></mat-divider>
+          <h4>{{ video.uploaded | date:'d MMMM y' }}</h4>
+        </div>
+        <div class="info-row-item info-row-item-spaced">
+          <div class="like-container">
+            <div class="like-bar">
+              <progress-bar
+                [background]="'#a4a4a4'"
+                [fill]="'#FFFFFF'"
+                [min]="0"
+                [max]="video.likes.likes + video.likes.dislikes"
+                [ranges]="[[0, video.likes.likes]]">
+              </progress-bar>
+            </div>
+            <div
+              class="like"
+              (click)="performLikeAction(true, video.likes.liked)"
+              [ngClass]="{'selected': video.likes.liked}">
+              {{ video.likes.likes }}
+            </div>
+            <div
+              class="like dislike"
+              (click)="performLikeAction(false, video.likes.disliked)"
+              [ngClass]="{'selected': video.likes.disliked}">
+              {{ video.likes.dislikes }}
+            </div>
+          </div>
+          <video-actions
+            [videoId]="video.id"
+            [favorite]="video.favorite"
+            [watchLater]="video.watchLater">
+          </video-actions>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="meta">
+      <div class="channel" *ngVar="video.channel.name as channelName">
+        <div class="channel-avatar">
+          <img
+            class="fadein"
+            (click)="$event.stopPropagation()"
+            [lazyLoad]="video.channel.avatar?.location"
+            [routerLink]="['/channel', channelName]">
+        </div>
+        <div class="channel-data">
+          <h4
+            class="channel-link"
+            (click)="$event.stopPropagation()"
+            [routerLink]="['/channel', channelName]"
+            [matTooltip]="channelName"
+            matTooltipPosition="left">
+            {{ channelName }}
+          </h4>
+          <h4>{{ video.channel.subscriptionsCount | number }} {{ video.channel.subscriptionsCount | plural:'subskrypcja':'subskrypcje':'subskrypcji' }}</h4>
+        </div>
+        <div class="subscribe">
+          <subscribe-button [channelName]="video?.channel?.name"></subscribe-button>
+        </div>
+      </div>
+      <div class="description">
+        <mat-expansion-panel
+          #description
+          class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            {{ description.expanded ? 'Zwiń opis' : 'Rozwiń opis' }}
+          </mat-expansion-panel-header>
+          <p>
+            {{ video.description ?? 'Brak opisu' }}
+          </p>
+        </mat-expansion-panel>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="comments">
+      <public-comment-section [videoId]="video.id"></public-comment-section>
+    </div>
+
+    <mat-divider *ngIf="responsiveLayoutService.isMobile | async"></mat-divider>
+  </mat-card>
+</div>
+
+<div class="recommended">
+  <public-video-section
+    infinite-scroll
+    #related="infiniteScroll"
+    [dataLoader]="relatedDataLoader"
+    [pageSize]="10"
+    [videos]="$any(related.content)"
+    displayMode="row">
+  </public-video-section>
+</div>

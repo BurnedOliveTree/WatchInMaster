@@ -1,0 +1,48 @@
+@import "media-utils";
+
+.header {
+  display: flex;
+}
+
+.info {
+  flex: 1;
+}
+
+.action {
+  margin-left: 10px;
+
+  button {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @include small-mobile {
+      mat-icon {
+        margin: 0;
+      }
+
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
+.status-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.status-description {
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: 16px;
+  color: #e6e6e6;
+}
+
+.content {
+  margin-top: 24px;
+}

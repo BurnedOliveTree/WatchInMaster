@@ -1,0 +1,85 @@
+@import "media-utils";
+
+.filter {
+  position: sticky;
+  top: 20px;
+  left: 0;
+
+  h2 {
+    margin: 0 0 0 6px;
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+.filter-items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @include desktop {
+    flex-direction: column;
+  }
+}
+
+.filter-item {
+  font-size: 14px;
+  margin-right: 16px;
+  flex-basis: calc(100% / 3 - 16px);
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  @include desktop {
+    margin-bottom: 24px;
+    margin-right: 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .filter-item-title {
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .filter-item-row {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    cursor: pointer;
+    color: #d6d6d6;
+
+    &:hover {
+      color: #FFFFFF;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &-selected {
+      color: #FFFFFF;
+      font-weight: 500;
+
+      &::after {
+        font-family: 'Material Icons', serif;
+        content: 'close';
+        margin-left: 8px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.apply {
+  margin-top: 16px;
+
+  button {
+    width: 100%;
+  }
+}

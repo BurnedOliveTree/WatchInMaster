@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+    // configuration
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // rabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

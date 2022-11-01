@@ -1,0 +1,412 @@
+@use 'sass:math';
+
+$z-index-input: 1;
+$z-index-quality: 2;
+
+$small-width-breakpoint: 450px;
+
+@mixin range-thumb($size, $color) {
+  border: none;
+  margin: 0;
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+  background: $color;
+  cursor: pointer;
+}
+
+@mixin range-input($size, $color) {
+  margin: 0;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+
+  &::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-slider-thumb {
+    @include range-thumb($size, $color);
+    -webkit-appearance: none;
+  }
+
+  &::-moz-range-thumb {
+    @include range-thumb($size, $color);
+  }
+
+  &::-ms-thumb {
+    @include range-thumb($size, $color);
+  }
+}
+
+@mixin unselectable {
+  cursor: default;
+  user-select: none;
+}
+
+@mixin spinner($size, $item-count, $color, $border-color) {
+  width: $size;
+  height: $size;
+  padding: 0;
+  box-sizing: border-box;
+
+  > * {
+    $item-size: $size * 2 / $item-count;
+    background-color: $color;
+    border: 1px solid $border-color;
+    width: $item-size;
+    height: $item-size;
+    margin-top: -$item-size / 2;
+    margin-left: -$item-size / 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 100%;
+    box-sizing: border-box;
+    animation: spin 1s ease-in-out infinite;
+
+    @for $i from 1 through $item-count {
+      $angle: (2 * math.$pi / $item-count) * $i;
+      &:nth-of-type(#{$i}) {
+        top: math.sin($angle) * 50% + 50%;
+        left: math.cos($angle) * 50% + 50%;
+        animation-delay: ($i / $item-count) - 1s;
+      }
+    }
+  }
+
+  @keyframes spin {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+}
+
+@mixin overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 3px 12px 3px 12px;
+  transition: all 0.2s ease;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  opacity: 0;
+  pointer-events: none;
+
+  @mixin visible-video-controls {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  &.visible {
+    @include visible-video-controls;
+  }
+
+  @media (hover: hover) {
+    &.hovering {
+      @include visible-video-controls;
+    }
+  }
+
+  @media (hover: none) {
+    &.touching {
+      @include visible-video-controls;
+    }
+  }
+}
+
+.video-progress {
+  position: relative;
+  margin-top: 6px;
+  display: flex;
+  $width: 100%;
+
+  progress-bar {
+    $height: 5px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: $height;
+    width: $width;
+    pointer-events: none;
+  }
+
+  input {
+    $height: 14px;
+    @include range-input($height, #f44336);
+    height: $height;
+    width: $width;
+    z-index: $z-index-input;
+
+    @media (hover: hover) {
+      &:hover + .scrubber-tooltip {
+        display: block;
+      }
+    }
+  }
+
+  .scrubber-tooltip {
+    @include unselectable;
+    display: none;
+    position: absolute;
+    top: -40px;
+    left: 0;
+    font-size: 14px;
+    padding: 4px;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+
+  button {
+    cursor: pointer;
+    width: 40px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    @media (max-width: $small-width-breakpoint) {
+      width: 30px;
+    }
+
+    &::before {
+      font-family: 'Material Icons', serif;
+      color: #fff;
+      font-size: 2.2em;
+      line-height: 2.2em;
+
+      @media (max-width: $small-width-breakpoint) {
+        font-size: 1.65em;
+        line-height: 1.65em;
+      }
+    }
+  }
+}
+
+.left-controls, .right-controls {
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.volume-controls {
+  $width: 100px;
+  $small-width: 50px;
+
+  display: flex;
+  align-items: center;
+
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    margin-left: 8px;
+  }
+
+  input {
+    $height: 14px;
+    @include range-input($height, #FFF);
+    height: $height;
+    width: $width;
+
+    @media (max-width: $small-width-breakpoint) {
+      width: $small-width;
+    }
+  }
+
+  progress-bar {
+    $height: 5px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: $height;
+    width: $width;
+    pointer-events: none;
+
+    @media (max-width: $small-width-breakpoint) {
+      width: $small-width;
+    }
+  }
+}
+
+.time {
+  margin-left: 15px;
+  font-size: 14px;
+
+  @media (max-width: $small-width-breakpoint) {
+    margin-left: 12px;
+  }
+
+  * {
+    @include unselectable;
+  }
+}
+
+.quality {
+  @include unselectable;
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 5px;
+
+  @media (hover: hover) {
+    &:hover .quality-options {
+      pointer-events: auto;
+      opacity: 1;
+    }
+  }
+
+  .quality-options {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: $z-index-quality;
+    transition: all 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+
+    &.open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+  }
+
+  .quality-option {
+    display: flex;
+    justify-content: center;
+    padding: 8px 15px;
+    font-size: 13px;
+    color: #FFF;
+    background-color: #464646;
+
+    &:hover {
+      background-color: #797979;
+    }
+
+    &.selected {
+      color: #323232;
+      background-color: #FFF;
+    }
+  }
+}
+
+.click-overlay {
+  @include overlay;
+  display: none;
+
+  @media (hover: hover) {
+    display: flex;
+  }
+
+  .playback-overlay-animation {
+    $size: 80px;
+    pointer-events: none;
+    display: flex;
+    width: $size;
+    height: $size;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -$size / 2;
+    margin-top: -$size / 2;
+    border-radius: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+
+    &::before {
+      font-family: 'Material Icons', serif;
+      color: #fff;
+      font-size: 2.5em;
+    }
+  }
+}
+
+.tap-overlay {
+  @include overlay;
+  display: none;
+
+  @media (hover: none) {
+    display: flex;
+  }
+}
+
+.quality-cancel-overlay {
+  @include overlay;
+  z-index: $z-index-quality;
+  display: none;
+
+  @media (hover: none) {
+    display: flex;
+  }
+}
+
+.buffering {
+  @include overlay;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease 0.2s;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .spinner {
+    @include spinner(56px, 8, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.1));
+    position: relative;
+
+    @media (max-width: 600px) {
+      @include spinner(40px, 8, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.1));
+    }
+  }
+}

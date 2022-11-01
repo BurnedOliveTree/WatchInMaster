@@ -1,0 +1,12 @@
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+    livereload:
+      enabled: false
+
+object-storage:
+  location:
+  access-key:
+  secret-key:

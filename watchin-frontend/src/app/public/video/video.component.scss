@@ -1,0 +1,266 @@
+@import "media-utils";
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    flex-direction: row;
+  }
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+
+  .edit-button {
+    width: 115px;
+    margin-bottom: 16px;
+  }
+
+  .title-row {
+    display: flex;
+
+    .title {
+      font-size: 15px;
+      line-height: 20px;
+
+      @include desktop {
+        font-size: 18px;
+        line-height: 24px;
+      }
+    }
+
+    mat-icon {
+      margin-right: 10px;
+    }
+  }
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #e6e6e6;
+
+    @include desktop {
+      flex-direction: row;
+    }
+
+    .info-row-item {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      margin-bottom: 14px;
+
+      @include desktop {
+        margin-bottom: 0;
+      }
+
+      &-spaced {
+        justify-content: space-between;
+
+        @include desktop {
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    h4 {
+      margin: 0;
+    }
+
+    mat-divider {
+      margin: 0 8px;
+    }
+
+    .like {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 25px;
+      color: #bfbfbf;
+
+      &:hover {
+        opacity: 0.85;
+      }
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+
+      &.selected {
+        color: #FFFFFF;
+      }
+
+      &::before {
+        font-family: 'Material Icons', serif;
+        content: 'thumb_up';
+        margin-right: 6px;
+        font-size: 20px;
+      }
+
+      &.dislike {
+        &::before {
+          content: 'thumb_down';
+        }
+      }
+    }
+
+    .like-container {
+      display: flex;
+      flex: 1;
+      justify-content: space-between;
+      position: relative;
+
+      @include desktop {
+        margin-right: 20px;
+        margin-top: -10px;
+      }
+    }
+
+    .like-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -10px;
+      height: 2px;
+
+      @include desktop {
+        bottom: 0;
+      }
+    }
+
+    video-actions {
+      @include mobile {
+        position: absolute;
+        right: 0;
+        top: -40px;
+      }
+    }
+  }
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0 0 0;
+
+  .channel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .channel-avatar {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: column;
+      justify-content: center;
+      margin-right: 12px;
+
+      img {
+        outline: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        @include desktop {
+          width: 48px;
+          height: 48px;
+        }
+      }
+    }
+
+    .channel-data {
+      display: flex;
+      flex: 1 1 100%;
+      flex-direction: column;
+      justify-content: center;
+      color: #e6e6e6;
+
+      h4 {
+        margin: 0;
+        font-size: 13px;
+        line-height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @include desktop {
+          font-size: 15px;
+          line-height: 20px;
+        }
+      }
+
+      .channel-link {
+        outline: none;
+        cursor: pointer;
+        font-weight: 500;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+
+        &:hover {
+          color: #FFFFFF;
+        }
+      }
+    }
+
+    .subscribe {
+      display: flex;
+      flex: 0 0 auto;
+    }
+  }
+
+  .description {
+    margin-top: 8px;
+    color: #e6e6e6;
+    text-align: justify;
+
+    mat-expansion-panel {
+      margin: 0 -24px;
+    }
+
+    mat-expansion-panel-header {
+      color: #e6e6e6;
+      text-transform: uppercase;
+    }
+
+    p {
+      color: #e6e6e6;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+.comments {
+  margin-top: 20px;
+
+  @include desktop {
+    margin-bottom: -16px !important;
+  }
+}
+
+.recommended {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: -23px 0 0 0;
+
+  @include desktop {
+    flex: 0 0 425px;
+    margin: 0 0 0 20px;
+  }
+}

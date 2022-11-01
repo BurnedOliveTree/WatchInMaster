@@ -1,0 +1,38 @@
+plugins {
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+    // object storage
+    implementation project(':watchin-objectstorage')
+
+    // kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+    // webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // reactor
+    implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+
+    // serialization
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+
+    // configuration
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // metrics
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+}
+
+task dockerBuild(type: Exec) {
+    group 'Docker'
+    description 'Packages CDN module into Docker image'
+    commandLine 'docker', 'build',
+        '-t', "watchin-cdn:latest",
+        '-f', "$projectDir/Dockerfile",
+        rootProject.projectDir
+}
+rootProject.dockerBuild.dependsOn(dockerBuild)

@@ -1,0 +1,46 @@
+@import "src/app/shared/navigation/navigation.component";
+
+.search-mobile {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: flex-end;
+
+  .open-search-icon {
+    cursor: pointer;
+  }
+
+  .search-bar {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #212121;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+
+    &-opened {
+      display: flex;
+    }
+
+    .back-icon {
+      cursor: pointer;
+      margin-right: 16px;
+    }
+
+    .search-component {
+      display: flex;
+      flex: 1 1 100%;
+      align-items: center;
+    }
+  }
+}
+
+.search-desktop {
+  display: flex;
+  flex-basis: 600px;
+  justify-content: center;
+  align-items: center;
+}

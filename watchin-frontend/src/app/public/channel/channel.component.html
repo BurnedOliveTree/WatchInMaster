@@ -1,0 +1,89 @@
+<mat-card
+  class="header"
+  [ngClass]="{'mat-elevation-z0': responsiveLayoutService.isMobile | async}">
+  <mat-card-content>
+    <div class="background" *ngIf="channel.background">
+      <img class="fadein" [lazyLoad]="channel.background.location" alt="Background">
+    </div>
+
+    <div class="data">
+      <div class="avatar">
+        <img class="fadein" [lazyLoad]="channel.avatar.location" alt="Avatar">
+      </div>
+      <div class="meta">
+        <h1
+          [matTooltip]="channel.name"
+          matTooltipPosition="left">
+          {{ channel.name }}
+        </h1>
+        <h4>{{ channel.subscriptionsCount | number }} {{ channel.subscriptionsCount | plural:'subskrypcja':'subskrypcje':'subskrypcji' }}</h4>
+      </div>
+      <div class="subscribe">
+        <subscribe-button [channelName]="channel.name"></subscribe-button>
+      </div>
+    </div>
+
+    <button *ngIf="(authenticationService.currentAccount | async)?.username === channel.name"
+            routerLink="/management/channel"
+            class="edit-button button-with-icon"
+            mat-stroked-button
+            color="primary">
+      <mat-icon color="accent">edit</mat-icon>
+      <span>Edytuj</span>
+    </button>
+
+    <div class="info">
+      <mat-tab-group [dynamicHeight]="true">
+        <mat-tab label="Opis">
+          <div class="description">
+            {{ channel?.description ?? 'Brak opisu' }}
+          </div>
+        </mat-tab>
+        <mat-tab label="Statystyki">
+          <mat-list class="statistics">
+            <mat-list-item>
+              <mat-icon mat-list-icon>calendar_today</mat-icon>
+              <div mat-line class="statistics-label">Data dołączenia</div>
+              <div mat-line> {{ channel.creationDate | date:'d MMMM y' }} </div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon mat-list-icon>video_library</mat-icon>
+              <div mat-line class="statistics-label">Liczba filmów</div>
+              <div mat-line> {{ channel.videosCount | number }} </div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon mat-list-icon>preview</mat-icon>
+              <div mat-line class="statistics-label">Liczba wyświetleń</div>
+              <div mat-line> {{ channel.viewsCount | number }} </div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon mat-list-icon>stars</mat-icon>
+              <div mat-line class="statistics-label">Liczba subskrypcji</div>
+              <div mat-line> {{ channel.subscriptionsCount | number }} </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-divider *ngIf="responsiveLayoutService.isMobile | async"></mat-divider>
+
+<div class="content" #uploadedVideos>
+  <public-video-section
+    infinite-scroll
+    #uploaded="infiniteScroll"
+    [dataLoader]="channelVideoDataLoader"
+    [pageSize]="10"
+    [filter]="filter"
+    [videos]="$any(uploaded.content)"
+    displayMode="row"
+    name="Przesłane filmy">
+  </public-video-section>
+
+  <public-video-filter
+    (filterSaved)="updateFilter($event)">
+  </public-video-filter>
+</div>

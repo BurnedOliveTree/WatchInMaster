@@ -1,0 +1,55 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+
+    livereload:
+      enabled: true
+
+  flyway:
+    enabled: false
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/watchin
+    username: watchin
+    password: password
+
+  redis:
+    host: localhost
+    port: 6379
+    password: password
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: watchin
+    password: password
+
+logging:
+  level:
+    web: debug
+    org.hibernate.SQL: DEBUG
+    net.javacrumbs.shedlock: DEBUG
+    ws.schild.jave: DEBUG
+
+application:
+  frontend:
+    url: http://localhost:4200
+
+  cdn:
+    url: http://localhost:8081
+
+object-storage:
+  location: http://localhost:9000
+  access-key: watchin
+  secret-key: password
+
+mailing:
+  host: localhost
+  port: 1025
+  username: watchin
+  password: password
+
+account:
+  password:
+    hashing-enabled: false

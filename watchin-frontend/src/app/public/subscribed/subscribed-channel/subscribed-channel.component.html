@@ -1,0 +1,40 @@
+<div class="channel">
+  <div class="background" *ngIf="channel.background">
+    <img class="fadein" [lazyLoad]="channel.background.location" alt="Background">
+  </div>
+
+  <div class="header">
+    <div class="avatar">
+      <img class="fadein"
+           [lazyLoad]="channel.avatar.location"
+           [routerLink]="['/channel', channel.name]">
+    </div>
+    <div class="name"
+         [routerLink]="['/channel', channel.name]"
+         [matTooltip]="channel.name"
+         matTooltipPosition="left">
+      {{ channel.name }}
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="content-item">
+      {{ channel.subscriptionsCount | number }} {{ channel.subscriptionsCount | plural:'subskrypcja':'subskrypcje':'subskrypcji'}}
+    </div>
+
+    <div class="content-item">
+      {{ channel.videosCount | number }} {{ channel.videosCount | plural:'film':'filmy':'filmów'}}
+    </div>
+
+    <div class="content-item content-item-link"
+         [routerLink]="['/channel', channel.name]">
+      Przejdź do profilu
+    </div>
+
+    <div class="content-item content-item-link content-item-unsubscribe"
+         (click)="unsubscribe()">
+      Przestań subskrybować
+    </div>
+  </div>
+
+</div>

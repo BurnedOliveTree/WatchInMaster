@@ -1,0 +1,44 @@
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+    livereload:
+      enabled: false
+
+  flyway:
+    enabled: true
+
+  datasource:
+    url:
+    username:
+    password:
+
+  redis:
+    host:
+    port:
+    password:
+
+  rabbitmq:
+    host:
+    port:
+    username:
+    password:
+
+application:
+  frontend:
+    url:
+
+  cdn:
+    url:
+
+object-storage:
+  location:
+  access-key:
+  secret-key:
+
+mailing:
+  host:
+  port:
+  username:
+  password:

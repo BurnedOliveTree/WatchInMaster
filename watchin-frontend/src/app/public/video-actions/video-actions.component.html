@@ -1,0 +1,23 @@
+<mat-icon
+  class="title-action"
+  (click)="$event.stopPropagation()"
+  [matMenuTriggerFor]="menu">
+  more_vert
+</mat-icon>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item class="action-menu-item" (click)="favoriteAction()">
+    <mat-icon>favorite</mat-icon>
+    <span>{{ favorite.status ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}</span>
+  </button>
+
+  <button mat-menu-item class="action-menu-item" (click)="watchLaterAction()">
+    <mat-icon>schedule</mat-icon>
+    <span>{{ watchLater.status ? 'Usuń z listy do obejrzenia' : 'Dodaj do obejrzenia' }}</span>
+  </button>
+
+  <button mat-menu-item class="action-menu-item">
+    <mat-icon>chevron_left</mat-icon>
+    <span>Anuluj</span>
+  </button>
+</mat-menu>

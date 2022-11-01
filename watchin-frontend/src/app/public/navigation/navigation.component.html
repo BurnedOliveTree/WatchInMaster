@@ -1,0 +1,50 @@
+<navigation>
+  <ng-container topBarContent>
+    <div class="top-bar-region top-bar-region-full">
+      <ng-container *ngIf="responsiveLayoutService.isMobile | async">
+        <div class="search-mobile">
+          <mat-icon
+            class="open-search-icon"
+            (click)="searchBar.classList.add('search-bar-opened')">
+            search
+          </mat-icon>
+          <div class="search-bar" #searchBar>
+            <mat-icon
+              class="back-icon"
+              (click)="searchBar.classList.remove('search-bar-opened')">
+              keyboard_arrow_left
+            </mat-icon>
+            <div class="search-component">
+              <public-navigation-search (searchAction)="searchBar.classList.remove('search-bar-opened')">
+              </public-navigation-search>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="responsiveLayoutService.isDesktop | async">
+        <div class="search-desktop">
+          <public-navigation-search></public-navigation-search>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container leftMenuContent>
+    <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>home</mat-icon>
+      <span>Strona główna</span>
+    </a>
+    <a mat-list-item routerLink="/subscribed" routerLinkActive="active">
+      <mat-icon>stars</mat-icon>
+      <span>Subskrybowane</span>
+    </a>
+    <a mat-list-item routerLink="/favorite" routerLinkActive="active">
+      <mat-icon>favorite</mat-icon>
+      <span>Ulubione</span>
+    </a>
+    <a mat-list-item routerLink="/watch-later" routerLinkActive="active">
+      <mat-icon>schedule</mat-icon>
+      <span>Do obejrzenia</span>
+    </a>
+  </ng-container>
+</navigation>

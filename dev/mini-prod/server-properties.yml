@@ -1,0 +1,44 @@
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+    livereload:
+      enabled: false
+
+  flyway:
+    enabled: true
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/watchin
+    username: watchin
+    password: password
+
+  redis:
+    host: redis
+    port: 6379
+    password: password
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: watchin
+    password: password
+
+application:
+  frontend:
+    url: http://localhost
+
+  cdn:
+    url: http://localhost:8081
+
+object-storage:
+  location: http://minio:9000
+  access-key: watchin
+  secret-key: password
+
+mailing:
+  host: maildev
+  port: 1025
+  username: watchin
+  password: password

@@ -1,0 +1,120 @@
+<div class="buffering" [ngClass]="{'visible': buffering}">
+  <div class="spinner">
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+  </div>
+</div>
+
+<div class="click-overlay"
+  (click)="requestPlaybackStateChange(!playing); playbackAnimationAction(animationHandle)">
+  <div #animationHandle
+    class="playback-overlay-animation"
+    [ngClass]="playing ? 'mi-pause' : 'mi-play-arrow'">
+  </div>
+</div>
+
+<div class="tap-overlay"
+  (touchstart)="touchAction(!touching)">
+</div>
+
+<div class="quality-cancel-overlay"
+  *ngIf="qualityOptionsOpened"
+  (touchstart)="qualityOptionsAction(false)">
+</div>
+
+<div
+  class="video-controls"
+  (touchstart)="touchAction(true)"
+  (touchmove)="touchAction(true)"
+  [ngClass]="{'visible': forceControls || !playing, 'hovering': hovering, 'touching': touching || qualityOptionsOpened}">
+  <div class="video-progress">
+    <progress-bar
+      [background]="'rgba(255, 255, 255, 0.25)'"
+      [fill]="'rgba(255, 255, 255, 0.55)'"
+      [min]="0"
+      [max]="contentLength"
+      [ranges]="buffered">
+    </progress-bar>
+
+    <progress-bar
+      [fill]="'#f44336'"
+      [min]="0"
+      [max]="contentLength"
+      [ranges]="[[0, contentPosition]]">
+    </progress-bar>
+
+    <input #scrubber
+      type="range"
+      min="0"
+      [max]="contentLength"
+      step="0.001"
+      [value]="contentPosition"
+      (input)="requestSeek(scrubber.valueAsNumber)"
+      (mousemove)="updateScrubberTooltip($event.offsetX, scrubber.clientWidth, scrubberTooltip.clientWidth)">
+
+    <div #scrubberTooltip class="scrubber-tooltip" [style.left.px]="scrubberTooltipOffset">
+      {{ scrubberTooltipLabel | formattedTime }}
+    </div>
+  </div>
+
+  <div class="bottom-controls">
+    <div class="left-controls">
+      <button
+        [ngClass]="playing ? 'mi-pause' : 'mi-play-arrow'"
+        (click)="requestPlaybackStateChange(!playing)">
+      </button>
+
+      <div class="volume-controls">
+        <button
+          [ngClass]="getVolumeLevelOrMuted() > VideoConstants.HIGH_VOLUME_CUTOFF ? 'mi-volume-up' : getVolumeLevelOrMuted() > VideoConstants.MIN_VOLUME ? 'mi-volume-down' : 'mi-volume-off'"
+          (click)="requestMuteStateChange(!muted)">
+        </button>
+
+        <div class="wrapper">
+          <progress-bar
+            [background]="'rgba(255, 255, 255, 0.25)'"
+            [fill]="'rgba(255, 255, 255, 1)'"
+            [min]="VideoConstants.MIN_VOLUME"
+            [max]="VideoConstants.MAX_VOLUME"
+            [ranges]="[[VideoConstants.MIN_VOLUME, getVolumeLevelOrMuted()]]">
+          </progress-bar>
+
+          <input #volume
+            type="range"
+            [min]="VideoConstants.MIN_VOLUME"
+            [max]="VideoConstants.MAX_VOLUME"
+            step="0.001"
+            [value]="getVolumeLevelOrMuted()"
+            (input)="requestVolumeLevelChange(volume.valueAsNumber)">
+        </div>
+      </div>
+
+      <div class="time">
+        <time>{{ contentPosition | formattedTime }}</time>
+        <span> / </span>
+        <time>{{ contentLength | formattedTime }}</time>
+      </div>
+    </div>
+
+    <div class="right-controls">
+      <div class="quality">
+        <div class="label" (click)="qualityOptionsAction(true)">
+          {{ selectedSource }}
+        </div>
+        <div class="quality-options" [ngClass]="{'open': qualityOptionsOpened}">
+          <div
+            *ngFor="let option of availableSources"
+            class="quality-option"
+            [ngClass]="{'selected': option === selectedSource}"
+            (click)="qualityOptionsAction(false); requestSourceChange(option)">
+            {{ option }}
+          </div>
+        </div>
+      </div>
+
+      <button
+        [ngClass]="fullscreen ? 'mi-fullscreen-exit' : 'mi-fullscreen'"
+        (click)="requestFullscreenChangeState(!fullscreen)">
+      </button>
+    </div>
+  </div>
+</div>

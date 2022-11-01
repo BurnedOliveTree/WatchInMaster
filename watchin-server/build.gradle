@@ -1,0 +1,100 @@
+plugins {
+    id 'cz.habarta.typescript-generator'
+    id 'org.hibernate.orm'
+    id 'org.flywaydb.flyway'
+}
+
+dependencies {
+    // common
+    implementation project(':watchin-common')
+
+    // object storage
+    implementation project(':watchin-objectstorage')
+
+    // mailing
+    implementation project(':watchin-mailing')
+
+    // media
+    api project(':watchin-media')
+
+    // queue
+    implementation project(':watchin-queue')
+
+    // web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // annotations
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    // scheduler
+    implementation 'net.javacrumbs.shedlock:shedlock-spring:4.25.0'
+    implementation 'net.javacrumbs.shedlock:shedlock-provider-redis-spring:4.25.0'
+
+    // utilities
+    implementation 'commons-io:commons-io:2.11.0'
+
+    // metrics
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+}
+
+generateTypeScript {
+    jsonLibrary = 'jackson2'
+    mapClasses = 'asClasses'
+    mapEnum = 'asEnum'
+    classPatterns = ['pw.edu.watchin.server.dto.**']
+    customTypeMappings = ['java.time.Duration:number']
+    excludeClassPatterns = [
+        'java.io.Serializable',
+        'java.lang.Comparable'
+    ]
+    outputFile = "$frontendGeneratedDir/dto.ts"
+    outputFileType = 'implementationFile'
+    outputKind = 'module'
+}
+rootProject.generateDTO.dependsOn(generateTypeScript)
+
+task deployFrontend(type: Copy) {
+    group 'Frontend'
+    from frontendDist
+    into "$buildDir/resources/main/frontend"
+}
+rootProject.deployFrontend.dependsOn(deployFrontend)
+
+task dockerBuild(type: Exec) {
+    group 'Docker'
+    description 'Packages server module into Docker image'
+    commandLine 'docker', 'build',
+        '-t', "watchin-server:latest",
+        '-f', "$projectDir/Dockerfile",
+        rootProject.projectDir
+}
+rootProject.dockerBuild.dependsOn(dockerBuild)
+
+bootJar {
+    from(frontendDist) {
+        into 'frontend'
+    }
+    dependsOn rootProject.buildFrontend
+}
+
+hibernate {
+    enhance {
+        enableLazyInitialization = true
+    }
+}

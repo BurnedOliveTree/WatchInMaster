@@ -1,0 +1,116 @@
+@import "media-utils";
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e6e6e6;
+  border-radius: 4px;
+  align-items: center;
+  margin: 0 auto;
+  transition: all 0.2s ease;
+
+  &.fileHover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .circle {
+    $size: 120px;
+    display: flex;
+    width: $size;
+    height: $size;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    margin-bottom: 16px;
+    cursor: default;
+    user-select: none;
+
+    mat-icon {
+      font-size: 56px;
+      width: $size;
+      line-height: $size;
+    }
+  }
+
+  &.uploading {
+    pointer-events: none;
+
+    .circle {
+      animation: pulse 2s infinite;
+    }
+  }
+
+  label::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    cursor: pointer;
+  }
+}
+
+.progress {
+  pointer-events: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  @include desktop {
+    max-width: 600px;
+  }
+
+  .file-icon {
+    font-size: 54px;
+    width: 54px;
+    height: 54px;
+    user-select: none;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .file-data {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-start;
+    padding: 0 16px;
+  }
+
+  .file-error {
+    font-weight: bold;
+    color: #f44336;
+    margin-bottom: 2px;
+  }
+
+  .file-name {
+    font-weight: 500;
+    color: #e6e6e6;
+    margin-bottom: 2px;
+  }
+
+  .file-size {
+    color: #bfbfbf;
+    margin-bottom: 6px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.12);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}

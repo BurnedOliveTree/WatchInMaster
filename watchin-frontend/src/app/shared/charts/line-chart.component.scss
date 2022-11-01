@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  margin-bottom: 20px;
+  position: relative;
+  height: 100%;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.chart {
+  width: 100%;
+
+  ::ng-deep .mat-card-header {
+    flex-wrap: wrap;
+  }
+
+  ::ng-deep .mat-card-header-text {
+    margin: 0;
+  }
+}
+
+.chart-title {
+  margin: 0 0 18px 0 !important;
+
+  &:empty {
+    margin: 0 !important;
+  }
+}
