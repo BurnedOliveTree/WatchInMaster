@@ -18,8 +18,8 @@ public class StreamService {
     @Transactional
     public Stream generateStream(Account account) {
         // TODO
-        var key = UUID.randomUUID();
-        var stream = new Stream(key, url, url + "/" + key, account);
+        var id = UUID.randomUUID();
+        var stream = new Stream(id, rtmp, createDASH(id), account);
         streams.add(stream);
         return stream;
     }
@@ -38,8 +38,18 @@ public class StreamService {
         return streams.stream().filter(stream -> stream.id.equals(id)).findFirst().get();
     }
 
+    private String createHLS(UUID id) {
+        return hls + "/" + id + ".m3u8";
+    }
+
+    private String createDASH(UUID id) {
+        return dash + "/" + id + ".mpd";
+    }
+
     // TODO move to config.yaml
-    private static final String url = "rtmp://192.168.0.156/live";
+    private static final String rtmp = "rtmp://192.168.0.156/live";
+    private static final String hls = "http://192.168.0.156:8082/hls";
+    private static final String dash = "http://192.168.0.156:8082/dash";
 
     @Value
     public class Stream {
