@@ -56,10 +56,23 @@ public class VideoManagementService {
     @Autowired
     private VideoProcessingService videoProcessingService;
 
+    @Autowired
+    private StreamService streamService;
+
     @Transactional
     public VideoEditDTO createVideo(Account account, MultipartFile file) throws IOException {
         var channel = channelRepository.findByAccountId(account.getId())
             .orElseThrow(EntityNotFoundException::new);
+        var video = videoProcessingService.createVideo(channel, file);
+        return videoMapperService.mapEdit(video);
+    }
+
+    @Transactional
+    public VideoEditDTO fromStream(UUID streamId, MultipartFile file) throws IOException {
+        // TODO create from Stream (transfer views, name etc)
+        var stream = streamService.getStream(streamId);
+        var channel = channelRepository.findByAccountId(stream.getAuthor().getId())
+                .orElseThrow(EntityNotFoundException::new);
         var video = videoProcessingService.createVideo(channel, file);
         return videoMapperService.mapEdit(video);
     }

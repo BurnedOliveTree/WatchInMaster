@@ -13,6 +13,7 @@ import pw.edu.watchin.server.dto.video.VideoEditDTO;
 import pw.edu.watchin.server.dto.video.VideoTableEntryDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
+import pw.edu.watchin.server.service.video.StreamService;
 import pw.edu.watchin.server.service.video.VideoManagementService;
 
 import java.io.IOException;
@@ -25,9 +26,23 @@ public class VideoManagementController {
     @Autowired
     private VideoManagementService videoManagementService;
 
+    @Autowired
+    private StreamService streamService;
+
     @PostMapping("/upload")
     public VideoEditDTO uploadVideo(@RequestPart MultipartFile video, @AuthAccount Account account) throws IOException {
         return videoManagementService.createVideo(account, video);
+    }
+
+    @PostMapping("/stream")
+    public StreamService.Stream createStream(@AuthAccount Account account) {
+        return streamService.generateStream(account);
+    }
+
+    // TODO add security
+    @PostMapping("/stream/{id}")
+    public VideoEditDTO uploadStream(@PathVariable UUID id, @RequestPart MultipartFile video) throws IOException {
+        return videoManagementService.fromStream(id, video);
     }
 
     @GetMapping("/{id}")
