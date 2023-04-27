@@ -1,36 +1,55 @@
 package pw.edu.watchin.server.service.video;
 
 import lombok.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pw.edu.watchin.server.domain.channel.ChannelEntity;
+import pw.edu.watchin.server.domain.resource.ResourceType;
+import pw.edu.watchin.server.dto.channel.ChannelTileDTO;
 import pw.edu.watchin.server.dto.pagination.PageRequest;
 import pw.edu.watchin.server.dto.pagination.PageResponse;
+import pw.edu.watchin.server.dto.resource.ResourceDTO;
+import pw.edu.watchin.server.repository.channel.ChannelRepository;
 import pw.edu.watchin.server.security.Account;
+import pw.edu.watchin.server.service.channel.ChannelMapperService;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 // TODO refactor
 @Service
 public class StreamService {
+    @Autowired
+    ChannelRepository channelRepository;
+    @Autowired
+    ChannelMapperService channelMapperService;
+
     // TODO move to DB
     private final Set<Stream> streams = new HashSet<>();
 
     @Transactional
-    public Stream generateStream(Account account) {
+    public MyStreamDTO generateStream(Account account) {
         // TODO
         var id = UUID.randomUUID();
-        var stream = new Stream(id, rtmp, createHLS(id), account);
+        var stream = new Stream(id, "TODO", "TODO",
+            rtmp, createHLS(id),
+            channelRepository.findByAccountId(account.getId()).get(),
+            LocalDateTime.now());
         streams.add(stream);
-        return stream;
+        return stream.toMyStreamDTO();
     }
 
     public void viewStream(UUID id, Account account) {
         // TODO
     }
 
-    public PageResponse<Stream> findStreams(PageRequest<Void> pageRequest, Account account) {
+    public PageResponse<ListableStream> findStreams(PageRequest<Void> pageRequest, Account account) {
         // TODO
-        return new PageResponse<>(new ArrayList<>(streams), 1, 1, streams.size());
+        return new PageResponse<>(new ArrayList<>(streams.stream().map(Stream::toListable).collect(Collectors.toList())),
+                1, 1, streams.size());
     }
 
     Stream getStream(UUID id) {
@@ -52,10 +71,62 @@ public class StreamService {
     private static final String dash = "http://192.168.0.156:8082/dash";
 
     @Value
-    public class Stream {
+    class Stream {
         UUID id;
+        String title;
+        String description;
         String uploadUrl;
         String watchUrl;
-        Account author;
+        ChannelEntity author;
+        LocalDateTime uploaded;
+
+        // TODO
+        ListableStream toListable() {
+            return new ListableStream(
+                id,
+                title,
+                description,
+                channelMapperService.mapTile(author),
+                Duration.ZERO,
+                uploaded,
+                0,
+                new ResourceDTO("", ResourceType.AVATAR)
+            );
+        }
+
+        MyStreamDTO toMyStreamDTO() {
+            return new MyStreamDTO(
+                id,
+                title,
+                description,
+                uploadUrl,
+                watchUrl,
+                channelMapperService.mapTile(author),
+                uploaded
+            );
+        }
+    }
+
+    @Value
+    public class MyStreamDTO {
+        UUID id;
+        String title;
+        String description;
+        String uploadUrl;
+        String watchUrl;
+        ChannelTileDTO author;
+        LocalDateTime uploaded;
+    }
+
+    @Value
+    public class ListableStream {
+        UUID id;
+        String title;
+        String description;
+        ChannelTileDTO channel;
+        Duration length;
+        LocalDateTime uploaded;
+        long views;
+        ResourceDTO thumbnail;
     }
 }

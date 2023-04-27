@@ -35,7 +35,7 @@ public class VideoManagementController {
     }
 
     @PostMapping("/stream")
-    public StreamService.Stream createStream(@AuthAccount Account account) {
+    public StreamService.MyStreamDTO createStream(@AuthAccount Account account) {
         return streamService.generateStream(account);
     }
 

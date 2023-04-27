@@ -53,8 +53,8 @@ public class VideoListController {
         return videoSectionService.findWatchLater(pageRequest, account);
     }
 
-    @GetMapping("/streams")
-    public PageResponse<StreamService.Stream> findStreams(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
+    @PostMapping("/streams")
+    public PageResponse<StreamService.ListableStream> findStreams(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
         return streamService.findStreams(pageRequest, account);
     }
 }

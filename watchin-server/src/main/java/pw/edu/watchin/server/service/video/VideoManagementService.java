@@ -71,8 +71,7 @@ public class VideoManagementService {
     public VideoEditDTO fromStream(UUID streamId, MultipartFile file) throws IOException {
         // TODO create from Stream (transfer views, name etc)
         var stream = streamService.getStream(streamId);
-        var channel = channelRepository.findByAccountId(stream.getAuthor().getId())
-                .orElseThrow(EntityNotFoundException::new);
+        var channel = stream.getAuthor();
         var video = videoProcessingService.createVideo(channel, file);
         return videoMapperService.mapEdit(video);
     }
