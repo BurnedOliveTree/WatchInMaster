@@ -19,7 +19,7 @@ public class StreamService {
     public Stream generateStream(Account account) {
         // TODO
         var id = UUID.randomUUID();
-        var stream = new Stream(id, rtmp, createDASH(id), account);
+        var stream = new Stream(id, rtmp, createHLS(id), account);
         streams.add(stream);
         return stream;
     }
