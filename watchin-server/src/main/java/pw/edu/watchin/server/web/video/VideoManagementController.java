@@ -55,6 +55,11 @@ public class VideoManagementController {
         videoManagementService.deleteVideo(id, account);
     }
 
+    @DeleteMapping("/stream/{id}")
+    public void deleteStream(@PathVariable UUID id, @AuthAccount Account account) {
+        streamService.deleteStream(id, account);
+    }
+
     @PostMapping("/{id}/title")
     public String saveTitle(@PathVariable UUID id, @RequestBody String title, @AuthAccount Account account) {
         return videoManagementService.saveTitle(id, title, account);
@@ -88,6 +93,11 @@ public class VideoManagementController {
     @PostMapping("/list")
     public PageResponse<VideoTableEntryDTO> getAllVideos(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
         return videoManagementService.getAllVideos(pageRequest, account);
+    }
+
+    @PostMapping("/stream/list")
+    public PageResponse<StreamService.MyStreamDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
+        return streamService.getAllStreams(pageRequest, account);
     }
 
     @GetMapping("/{id}/status")

@@ -12,6 +12,7 @@ import pw.edu.watchin.server.dto.channel.ChannelTileDTO;
 import pw.edu.watchin.server.dto.pagination.PageRequest;
 import pw.edu.watchin.server.dto.pagination.PageResponse;
 import pw.edu.watchin.server.dto.resource.ResourceDTO;
+import pw.edu.watchin.server.dto.search.VideoTableFilterDTO;
 import pw.edu.watchin.server.dto.video.*;
 import pw.edu.watchin.server.exception.EntityNotFoundException;
 import pw.edu.watchin.server.repository.channel.ChannelRepository;
@@ -59,8 +60,17 @@ public class StreamService {
         return getStream(id).toWatchableStream();
     }
 
+    public PageResponse<MyStreamDTO> getAllStreams(PageRequest<VideoTableFilterDTO> pageRequest, Account account) {
+        return new PageResponse<>(streams.stream().map(Stream::toMyStreamDTO).collect(Collectors.toList()),
+                1, 1, streams.size());
+    }
+
     public void viewStream(UUID id, Account account) {
         // TODO
+    }
+
+    public void deleteStream(UUID id, Account account) {
+        streams.remove(getStream(id));
     }
 
     public PageResponse<ListableStream> findStreams(PageRequest<Void> pageRequest, Account account) {
@@ -124,7 +134,8 @@ public class StreamService {
                 uploadUrl,
                 watchUrl,
                 channelMapperService.mapTile(author),
-                uploaded
+                uploaded,
+                visibility
             );
         }
 
@@ -163,6 +174,7 @@ public class StreamService {
         String watchUrl;
         ChannelTileDTO author;
         LocalDateTime uploaded;
+        VideoVisibilityType visibility;
     }
 
     @Value
