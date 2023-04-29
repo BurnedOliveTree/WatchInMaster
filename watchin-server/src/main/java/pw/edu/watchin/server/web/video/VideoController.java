@@ -34,6 +34,11 @@ public class VideoController {
     }
 
     @GetMapping("/stream/{id}")
+    public StreamService.FullStream getStreamDetails(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
+        return streamService.getStreamDetails(id, account);
+    }
+
+    @PostMapping("/stream/{id}/view")
     public void viewStream(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
         streamService.viewStream(id, account);
     }

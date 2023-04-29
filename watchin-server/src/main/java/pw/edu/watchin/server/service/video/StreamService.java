@@ -6,10 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pw.edu.watchin.server.domain.channel.ChannelEntity;
 import pw.edu.watchin.server.domain.resource.ResourceType;
+import pw.edu.watchin.server.domain.video.VideoQualityType;
+import pw.edu.watchin.server.domain.video.VideoVisibilityType;
 import pw.edu.watchin.server.dto.channel.ChannelTileDTO;
 import pw.edu.watchin.server.dto.pagination.PageRequest;
 import pw.edu.watchin.server.dto.pagination.PageResponse;
 import pw.edu.watchin.server.dto.resource.ResourceDTO;
+import pw.edu.watchin.server.dto.video.*;
+import pw.edu.watchin.server.exception.EntityNotFoundException;
 import pw.edu.watchin.server.repository.channel.ChannelRepository;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.service.channel.ChannelMapperService;
@@ -34,12 +38,29 @@ public class StreamService {
     public MyStreamDTO generateStream(Account account) {
         // TODO
         var id = UUID.randomUUID();
-        var stream = new Stream(id, "TODO", "TODO",
-            rtmp, createHLS(id),
-            channelRepository.findByAccountId(account.getId()).get(),
-            LocalDateTime.now());
+        var stream = new Stream(
+            id,
+            "TODO",
+            "TODO",
+            rtmp,
+            createHLS(id),
+            channelRepository.findByAccountId(account.getId())
+                .orElseThrow(EntityNotFoundException::new),
+            LocalDateTime.now(),
+            Duration.ZERO, // TODO
+            0,
+            VideoVisibilityType.PUBLIC // TODO
+        );
         streams.add(stream);
         return stream.toMyStreamDTO();
+    }
+
+    public FullStream getStreamDetails(UUID id, Account account) {
+        return streams.stream()
+            .filter(stream -> stream.id.equals(id))
+            .findFirst()
+            .orElseThrow(EntityNotFoundException::new)
+            .toWatchableStream();
     }
 
     public void viewStream(UUID id, Account account) {
@@ -53,8 +74,10 @@ public class StreamService {
     }
 
     Stream getStream(UUID id) {
-        // TODO what if not found?
-        return streams.stream().filter(stream -> stream.id.equals(id)).findFirst().get();
+        return streams.stream()
+            .filter(stream -> stream.id.equals(id))
+            .findFirst()
+            .orElseThrow(EntityNotFoundException::new);
     }
 
     private String createHLS(UUID id) {
@@ -79,6 +102,9 @@ public class StreamService {
         String watchUrl;
         ChannelEntity author;
         LocalDateTime uploaded;
+        Duration length;
+        long views;
+        VideoVisibilityType visibility;
 
         // TODO
         ListableStream toListable() {
@@ -105,6 +131,31 @@ public class StreamService {
                 uploaded
             );
         }
+
+        FullStream toWatchableStream() {
+            return new FullStream(
+                id,
+                title,
+                description,
+                uploaded,
+                length,
+                views,
+                channelMapperService.mapTile(author),
+                List.of(
+                    new VideoResourceDTO(
+                        new ResourceDTO(watchUrl, ResourceType.VIDEO),
+                        new VideoQualityDTO(
+                            VideoQualityType.RESOLUTION_720p,
+                            VideoQualityType.RESOLUTION_720p.getFriendlyName()
+                        )
+                    )
+                ),
+                visibility,
+                new VideoLikesDTO(0, 0, false, false), // TODO
+                new VideoFavoriteDTO(false), // TODO
+                new VideoWatchLaterDTO(false) // TODO
+            );
+        }
     }
 
     @Value
@@ -128,5 +179,21 @@ public class StreamService {
         LocalDateTime uploaded;
         long views;
         ResourceDTO thumbnail;
+    }
+
+    @Value
+    public class FullStream {
+        UUID id;
+        String title;
+        String description;
+        LocalDateTime uploaded;
+        Duration length;
+        long views;
+        ChannelTileDTO channel;
+        List<VideoResourceDTO> resources;
+        VideoVisibilityType visibility;
+        VideoLikesDTO likes;
+        VideoFavoriteDTO favorite;
+        VideoWatchLaterDTO watchLater;
     }
 }
