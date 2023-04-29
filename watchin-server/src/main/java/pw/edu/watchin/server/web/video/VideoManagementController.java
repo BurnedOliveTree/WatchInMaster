@@ -35,8 +35,8 @@ public class VideoManagementController {
     }
 
     @PostMapping("/stream")
-    public StreamService.MyStreamDTO createStream(@AuthAccount Account account) {
-        return streamService.generateStream(account);
+    public StreamService.MyStreamDTO createStream(@RequestBody String title, @AuthAccount Account account) {
+        return streamService.generateStream(title, account);
     }
 
     // TODO add security

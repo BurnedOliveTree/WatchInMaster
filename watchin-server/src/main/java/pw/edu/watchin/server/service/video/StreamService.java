@@ -35,13 +35,13 @@ public class StreamService {
     private final Set<Stream> streams = new HashSet<>();
 
     @Transactional
-    public MyStreamDTO generateStream(Account account) {
+    public MyStreamDTO generateStream(String title, Account account) {
         // TODO
         var id = UUID.randomUUID();
         var stream = new Stream(
             id,
-            "TODO",
-            "TODO",
+            title,
+            null,
             rtmp,
             createHLS(id),
             channelRepository.findByAccountId(account.getId())
@@ -56,11 +56,7 @@ public class StreamService {
     }
 
     public FullStream getStreamDetails(UUID id, Account account) {
-        return streams.stream()
-            .filter(stream -> stream.id.equals(id))
-            .findFirst()
-            .orElseThrow(EntityNotFoundException::new)
-            .toWatchableStream();
+        return getStream(id).toWatchableStream();
     }
 
     public void viewStream(UUID id, Account account) {
@@ -69,7 +65,7 @@ public class StreamService {
 
     public PageResponse<ListableStream> findStreams(PageRequest<Void> pageRequest, Account account) {
         // TODO
-        return new PageResponse<>(new ArrayList<>(streams.stream().map(Stream::toListable).collect(Collectors.toList())),
+        return new PageResponse<>(streams.stream().map(Stream::toListable).collect(Collectors.toList()),
                 1, 1, streams.size());
     }
 
