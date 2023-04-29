@@ -96,7 +96,7 @@ public class VideoManagementController {
     }
 
     @PostMapping("/stream/list")
-    public PageResponse<StreamService.MyStreamDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
+    public PageResponse<StreamService.MyStreamWithStatsDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
         return streamService.getAllStreams(pageRequest, account);
     }
 

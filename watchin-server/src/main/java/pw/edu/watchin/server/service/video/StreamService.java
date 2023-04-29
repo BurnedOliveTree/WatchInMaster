@@ -60,8 +60,8 @@ public class StreamService {
         return getStream(id).toWatchableStream();
     }
 
-    public PageResponse<MyStreamDTO> getAllStreams(PageRequest<VideoTableFilterDTO> pageRequest, Account account) {
-        return new PageResponse<>(streams.stream().map(Stream::toMyStreamDTO).collect(Collectors.toList()),
+    public PageResponse<MyStreamWithStatsDTO> getAllStreams(PageRequest<VideoTableFilterDTO> pageRequest, Account account) {
+        return new PageResponse<>(streams.stream().map(Stream::toMyStreamWithStatsDTO).collect(Collectors.toList()),
                 1, 1, streams.size());
     }
 
@@ -139,6 +139,21 @@ public class StreamService {
             );
         }
 
+        MyStreamWithStatsDTO toMyStreamWithStatsDTO() {
+            return new MyStreamWithStatsDTO(
+                id,
+                title,
+                description,
+                uploadUrl,
+                watchUrl,
+                channelMapperService.mapTile(author),
+                length,
+                uploaded,
+                views,
+                visibility
+            );
+        }
+
         FullStream toWatchableStream() {
             return new FullStream(
                 id,
@@ -174,6 +189,20 @@ public class StreamService {
         String watchUrl;
         ChannelTileDTO author;
         LocalDateTime uploaded;
+        VideoVisibilityType visibility;
+    }
+
+    @Value
+    public class MyStreamWithStatsDTO {
+        UUID id;
+        String title;
+        String description;
+        String uploadUrl;
+        String watchUrl;
+        ChannelTileDTO author;
+        Duration length;
+        LocalDateTime uploaded;
+        long views;
         VideoVisibilityType visibility;
     }
 
