@@ -64,8 +64,11 @@ public class StreamService {
     }
 
     public PageResponse<MyStreamWithStatsDTO> getAllStreams(PageRequest<VideoTableFilterDTO> pageRequest, Account account) {
-        return new PageResponse<>(streams.stream().map(Stream::toMyStreamWithStatsDTO).collect(Collectors.toList()),
-                1, 1, streams.size());
+        // TODO
+        var streams = getStreams(pageRequest).stream()
+            .map(Stream::toMyStreamWithStatsDTO)
+            .collect(Collectors.toList());
+        return new PageResponse<>(streams, 0, 0, streams.size());
     }
 
     public void viewStream(UUID id, Account account) {
@@ -104,8 +107,10 @@ public class StreamService {
 
     public PageResponse<ListableStream> findStreams(PageRequest<Void> pageRequest, Account account) {
         // TODO
-        return new PageResponse<>(streams.stream().map(Stream::toListable).collect(Collectors.toList()),
-                1, 1, streams.size());
+        var streams = getStreams(pageRequest).stream()
+                .map(Stream::toListable)
+                .collect(Collectors.toList());
+        return new PageResponse<>(streams, 0, 0, streams.size());
     }
 
     Stream getStream(UUID id) {
@@ -113,6 +118,13 @@ public class StreamService {
             .filter(stream -> stream.id.equals(id))
             .findFirst()
             .orElseThrow(EntityNotFoundException::new);
+    }
+
+    List<Stream> getStreams(PageRequest pageRequest) {
+        return this.streams.stream()
+            .skip(pageRequest.getPage() * pageRequest.getSize())
+            .limit(pageRequest.getSize())
+            .collect(Collectors.toList());
     }
 
     private String createHLS(UUID id) {
