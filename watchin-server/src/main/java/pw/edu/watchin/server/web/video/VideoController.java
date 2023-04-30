@@ -8,7 +8,6 @@ import pw.edu.watchin.server.dto.pagination.PageResponse;
 import pw.edu.watchin.server.dto.video.*;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
-import pw.edu.watchin.server.service.video.StreamService;
 import pw.edu.watchin.server.service.video.VideoService;
 
 import java.util.UUID;
@@ -16,12 +15,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/video")
 public class VideoController {
-
     @Autowired
     private VideoService videoService;
-
-    @Autowired
-    private StreamService streamService;
 
     @GetMapping("/{id}")
     public VideoDTO getVideoDetails(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
@@ -31,16 +26,6 @@ public class VideoController {
     @PostMapping("/{id}/view")
     public void viewVideo(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
         videoService.viewVideo(id, account);
-    }
-
-    @GetMapping("/stream/{id}")
-    public StreamService.FullStream getStreamDetails(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
-        return streamService.getStreamDetails(id, account);
-    }
-
-    @PostMapping("/stream/{id}/view")
-    public void viewStream(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
-        streamService.viewStream(id, account);
     }
 
     @PostMapping("/{id}/like")

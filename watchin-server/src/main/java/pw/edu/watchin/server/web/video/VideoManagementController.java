@@ -13,7 +13,6 @@ import pw.edu.watchin.server.dto.video.VideoEditDTO;
 import pw.edu.watchin.server.dto.video.VideoTableEntryDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
-import pw.edu.watchin.server.service.video.StreamService;
 import pw.edu.watchin.server.service.video.VideoManagementService;
 
 import java.io.IOException;
@@ -26,23 +25,9 @@ public class VideoManagementController {
     @Autowired
     private VideoManagementService videoManagementService;
 
-    @Autowired
-    private StreamService streamService;
-
     @PostMapping("/upload")
     public VideoEditDTO uploadVideo(@RequestPart MultipartFile video, @AuthAccount Account account) throws IOException {
         return videoManagementService.createVideo(account, video);
-    }
-
-    @PostMapping("/stream")
-    public StreamService.MyStreamDTO createStream(@RequestBody String title, @AuthAccount Account account) {
-        return streamService.generateStream(title, account);
-    }
-
-    // TODO add security
-    @PostMapping("/stream/{id}")
-    public VideoEditDTO uploadStream(@PathVariable UUID id, @RequestPart MultipartFile video) throws IOException {
-        return videoManagementService.fromStream(id, video);
     }
 
     @GetMapping("/{id}")
@@ -53,11 +38,6 @@ public class VideoManagementController {
     @DeleteMapping("/{id}")
     public void deleteVideo(@PathVariable UUID id, @AuthAccount Account account) {
         videoManagementService.deleteVideo(id, account);
-    }
-
-    @DeleteMapping("/stream/{id}")
-    public void deleteStream(@PathVariable UUID id, @AuthAccount Account account) {
-        streamService.deleteStream(id, account);
     }
 
     @PostMapping("/{id}/title")
@@ -93,11 +73,6 @@ public class VideoManagementController {
     @PostMapping("/list")
     public PageResponse<VideoTableEntryDTO> getAllVideos(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
         return videoManagementService.getAllVideos(pageRequest, account);
-    }
-
-    @PostMapping("/stream/list")
-    public PageResponse<StreamService.MyStreamWithStatsDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
-        return streamService.getAllStreams(pageRequest, account);
     }
 
     @GetMapping("/{id}/status")

@@ -8,7 +8,6 @@ import pw.edu.watchin.server.dto.pagination.PageResponse;
 import pw.edu.watchin.server.dto.video.VideoTileDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
-import pw.edu.watchin.server.service.video.StreamService;
 import pw.edu.watchin.server.service.video.VideoListService;
 
 import java.util.UUID;
@@ -16,12 +15,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/videos")
 public class VideoListController {
-
     @Autowired
     private VideoListService videoSectionService;
 
-    @Autowired
-    private StreamService streamService;
 
     @PostMapping("/popular")
     public PageResponse<VideoTileDTO> findMostPopular(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
@@ -51,10 +47,5 @@ public class VideoListController {
     @PostMapping("/watch-later")
     public PageResponse<VideoTileDTO> findWatchLater(@RequestBody PageRequest<Void> pageRequest, @AuthAccount Account account) {
         return videoSectionService.findWatchLater(pageRequest, account);
-    }
-
-    @PostMapping("/streams")
-    public PageResponse<StreamService.ListableStream> findStreams(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
-        return streamService.findStreams(pageRequest, account);
     }
 }
