@@ -83,6 +83,7 @@ public class VideoMapperService {
             video.getVisibility(),
             video.getStatus(),
             video.getViews(),
+            channelMapperService.mapTile(video.getChannel()),
             resourceMapperService.getResourceLocation(video.getThumbnail())
         );
     }

@@ -111,8 +111,8 @@ public class StreamService {
         Duration length;
         long views;
         VideoVisibilityType visibility;
+        ResourceDTO thumbnail = new ResourceDTO("", ResourceType.AVATAR); // TODO actual thumbnail
 
-        // TODO
         ListableStream toListable() {
             return new ListableStream(
                 id,
@@ -122,7 +122,7 @@ public class StreamService {
                 Duration.ZERO,
                 uploaded,
                 0,
-                new ResourceDTO("", ResourceType.AVATAR)
+                thumbnail
             );
         }
 
@@ -134,6 +134,7 @@ public class StreamService {
                 uploadUrl,
                 watchUrl,
                 channelMapperService.mapTile(author),
+                thumbnail,
                 uploaded,
                 visibility
             );
@@ -147,6 +148,7 @@ public class StreamService {
                 uploadUrl,
                 watchUrl,
                 channelMapperService.mapTile(author),
+                thumbnail,
                 length,
                 uploaded,
                 views,
@@ -188,6 +190,7 @@ public class StreamService {
         String uploadUrl;
         String watchUrl;
         ChannelTileDTO author;
+        ResourceDTO thumbnail;
         LocalDateTime uploaded;
         VideoVisibilityType visibility;
     }
@@ -200,6 +203,7 @@ public class StreamService {
         String uploadUrl;
         String watchUrl;
         ChannelTileDTO author;
+        ResourceDTO thumbnail;
         Duration length;
         LocalDateTime uploaded;
         long views;
