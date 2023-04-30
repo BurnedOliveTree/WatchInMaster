@@ -1,7 +1,9 @@
 package pw.edu.watchin.server.service.video;
 
 import lombok.Value;
+import lombok.With;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pw.edu.watchin.server.domain.channel.ChannelEntity;
@@ -19,6 +21,7 @@ import pw.edu.watchin.server.repository.channel.ChannelRepository;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.service.channel.ChannelMapperService;
 
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -73,6 +76,32 @@ public class StreamService {
         streams.remove(getStream(id));
     }
 
+    @Transactional
+    public void setTitle(UUID id, String title, Account account) {
+        var stream = getStream(id);
+        streams.remove(stream);
+        streams.add(stream.withTitle(title));
+    }
+
+    @Transactional
+    public void setDescription(UUID id, @Nullable String description, Account account) {
+        var stream = getStream(id);
+        streams.remove(stream);
+        streams.add(stream.withDescription(description));
+    }
+
+    @Transactional
+    public void setVisibility(UUID id, VideoVisibilityType visibility, Account account) {
+        var stream = getStream(id);
+        streams.remove(stream);
+        streams.add(stream.withVisibility(visibility));
+    }
+
+    @Transactional
+    public void setThumbnail(UUID id, @Nullable InputStream thumbnailSource, Account account) {
+        // TODO implement
+    }
+
     public PageResponse<ListableStream> findStreams(PageRequest<Void> pageRequest, Account account) {
         // TODO
         return new PageResponse<>(streams.stream().map(Stream::toListable).collect(Collectors.toList()),
@@ -99,6 +128,7 @@ public class StreamService {
     private static final String hls = "http://192.168.0.156:8082/hls";
     private static final String dash = "http://192.168.0.156:8082/dash";
 
+    @With
     @Value
     class Stream {
         UUID id;
