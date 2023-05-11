@@ -5,6 +5,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import pw.edu.watchin.server.dto.pagination.PageRequest;
 import pw.edu.watchin.server.dto.pagination.PageResponse;
+import pw.edu.watchin.server.dto.stream.ListableStreamDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
 import pw.edu.watchin.server.service.video.StreamService;
@@ -17,7 +18,7 @@ public class StreamListController {
     private StreamService streamService;
 
     @PostMapping("/list")
-    public PageResponse<StreamService.ListableStream> findStreams(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
+    public PageResponse<ListableStreamDTO> findStreams(@RequestBody PageRequest<Void> pageRequest, @AuthAccount @Nullable Account account) {
         return streamService.findStreams(pageRequest, account);
     }
 }

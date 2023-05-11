@@ -69,10 +69,8 @@ public class VideoManagementService {
 
     @Transactional
     public VideoEditDTO fromStream(UUID streamId, MultipartFile file) throws IOException {
-        // TODO create from Stream (transfer views, name etc)
-        var stream = streamService.getStream(streamId);
-        var channel = stream.getAuthor();
-        var video = videoProcessingService.createVideo(channel, file);
+        var stream = streamService.getStream(streamId, null);
+        var video = videoProcessingService.fromStream(stream, file);
         return videoMapperService.mapEdit(video);
     }
 

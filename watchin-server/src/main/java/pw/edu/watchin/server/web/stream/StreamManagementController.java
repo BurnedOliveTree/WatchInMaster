@@ -7,6 +7,8 @@ import pw.edu.watchin.server.domain.video.VideoVisibilityType;
 import pw.edu.watchin.server.dto.pagination.PageRequest;
 import pw.edu.watchin.server.dto.pagination.PageResponse;
 import pw.edu.watchin.server.dto.search.VideoTableFilterDTO;
+import pw.edu.watchin.server.dto.stream.EditableStreamDTO;
+import pw.edu.watchin.server.dto.stream.FullStreamDTO;
 import pw.edu.watchin.server.dto.video.VideoEditDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
@@ -27,7 +29,7 @@ public class StreamManagementController {
     private StreamService streamService;
 
     @PostMapping
-    public StreamService.MyStreamDTO createStream(@RequestBody String title, @AuthAccount Account account) {
+    public EditableStreamDTO createStream(@RequestBody String title, @AuthAccount Account account) {
         return streamService.generateStream(title, account);
     }
 
@@ -73,7 +75,7 @@ public class StreamManagementController {
     }
 
     @PostMapping("/list")
-    public PageResponse<StreamService.MyStreamWithStatsDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
+    public PageResponse<FullStreamDTO> getAllStreams(@RequestBody PageRequest<VideoTableFilterDTO> pageRequest, @AuthAccount Account account) {
         return streamService.getAllStreams(pageRequest, account);
     }
 }

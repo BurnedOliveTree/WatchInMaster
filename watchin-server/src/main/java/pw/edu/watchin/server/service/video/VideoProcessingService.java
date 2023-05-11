@@ -83,6 +83,34 @@ public class VideoProcessingService {
         return video;
     }
 
+    public VideoEntity fromStream(StreamEntity stream, MultipartFile file) throws IOException {
+        var sourceFile = File.createTempFile(fileSystemProperties.getVideoSourceFilePrefix(), null);
+        file.transferTo(sourceFile);
+
+        var video = new VideoEntity();
+        video.setTitle(stream.getTitle());
+        video.setLength(videoFileService.getDuration(sourceFile));
+        video.setThumbnail(resourceService.saveThumbnail(videoFileService.generateThumbnail(sourceFile)));
+        video.setFrame(video.getThumbnail());
+        video.setVisibility(stream.getVisibility());
+        video.setStatus(VideoStatusType.PROCESSING);
+        video.setChannel(stream.getChannel());
+        video.setViews(stream.getViews());
+        video.setUploaded(stream.getUploaded());
+        // TODO transfer likes, favorites, watchLater etc
+        videoRepository.saveAndFlush(video);
+
+        var videoResolution = videoFileService.getResolution(sourceFile);
+        var defaultQuality = VideoQualityType.base(videoResolution.getFirst(), videoResolution.getSecond());
+
+        var videoTranscodingProcess = new VideoTranscodingHash();
+        videoTranscodingProcess.setVideoId(video.getId());
+        videoTranscodingProcess.setSourceLocation(sourceFile.getAbsolutePath());
+        enqueueTranscodingProcess(videoTranscodingProcess, defaultQuality);
+
+        return video;
+    }
+
     @VideoTranscodingQueueHandler
     @Transactional
     @SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})

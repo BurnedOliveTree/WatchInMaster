@@ -3,6 +3,7 @@ package pw.edu.watchin.server.web.stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import pw.edu.watchin.server.dto.stream.WatchableStreamDTO;
 import pw.edu.watchin.server.security.Account;
 import pw.edu.watchin.server.security.AuthAccount;
 import pw.edu.watchin.server.service.video.StreamService;
@@ -16,7 +17,7 @@ public class StreamController {
     private StreamService streamService;
 
     @GetMapping("/{id}")
-    public StreamService.FullStream getStreamDetails(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
+    public WatchableStreamDTO getStreamDetails(@PathVariable UUID id, @AuthAccount @Nullable Account account) {
         return streamService.getStreamDetails(id, account);
     }
 
