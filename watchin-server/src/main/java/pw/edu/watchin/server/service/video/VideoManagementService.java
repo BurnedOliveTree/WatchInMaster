@@ -27,6 +27,7 @@ import pw.edu.watchin.server.service.security.SecurityService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,10 +70,29 @@ public class VideoManagementService {
     }
 
     @Transactional
-    public VideoEditDTO fromStream(UUID streamId, File file) throws IOException {
+    public VideoEditDTO fromStream(UUID streamId) throws IOException {
         var stream = streamService.getStream(streamId, null);
+        File file = convert(streamId.toString(), "/tmp/recordings");
         var video = videoProcessingService.fromStream(stream, file);
         return videoMapperService.mapEdit(video);
+    }
+
+    private File convert(String streamId, String directory) {
+        File file = Arrays.stream(
+                        new File(directory).listFiles((dir, name) -> name.startsWith(streamId) && name.endsWith(".flv")))
+                .findFirst().get();
+        String newName = directory + streamId + ".mp4";
+        try {
+            new ProcessBuilder("ffmpeg", "-i", file.getAbsolutePath(), "-codec", "copy", newName).start().waitFor();
+        } catch (InterruptedException | IOException e) {
+            throw new IllegalStateException("Video could not be converted to mp4, cause:", e);
+        }
+        if (!file.delete())
+            throw new IllegalStateException(streamId + "could not be deleted!");
+        file = new File(newName);
+        if (!file.isFile())
+            throw new IllegalStateException(newName + "could not be found!");
+        return file;
     }
 
     @Transactional(readOnly = true)

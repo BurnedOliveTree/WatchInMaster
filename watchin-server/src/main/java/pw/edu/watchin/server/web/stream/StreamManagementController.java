@@ -19,6 +19,7 @@ import pw.edu.watchin.server.service.video.VideoManagementService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
@@ -38,12 +39,8 @@ public class StreamManagementController {
 
     // TODO add security
     @PostMapping(value = "/upload", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public VideoEditDTO uploadStream(Request request) throws IOException, InterruptedException {
-        Process process = new ProcessBuilder("bash", "/tmp/recordings/script.sh", request.name, "/tmp/recordings").start();
-        process.waitFor();
-        return videoManagementService.fromStream(
-            UUID.fromString(request.name),
-            new File("/tmp/recordings/"+request.name+".mp4"));
+    public VideoEditDTO uploadStream(Request request) throws IOException {
+        return videoManagementService.fromStream(UUID.fromString(request.name));
     }
 
     @Value
