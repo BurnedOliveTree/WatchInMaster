@@ -50,7 +50,6 @@ public class StreamService {
     @Transactional
     public EditableStreamDTO generateStream(String title, Account account) {
         var stream = new StreamEntity();
-        stream.setId(UUID.randomUUID());
         stream.setTitle(title);
         stream.setDescription(null);
         stream.setUploadUrl(rtmp);
@@ -62,6 +61,8 @@ public class StreamService {
         stream.setViews(0);
         stream.setVisibility(VideoVisibilityType.PRIVATE);
         stream.setThumbnail(defaultThumbnail());
+        streamRepository.saveAndFlush(stream);
+        stream.setWatchUrl(createHLS(stream.getId()));
         streamRepository.saveAndFlush(stream);
         return streamMapperService.toEditable(stream);
     }

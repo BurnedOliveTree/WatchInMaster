@@ -93,6 +93,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/videos/search/autocomplete",
             "/api/videos/search/filter",
 
+            "/api/streams/list",
+            "/api/stream/manage/*",
+            "/api/stream/manage/*/done",
+
             "/api/channel/*",
             "/api/channel/*/subscription"
         };

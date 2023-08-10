@@ -24,6 +24,7 @@ import pw.edu.watchin.server.service.resource.ResourceMapperService;
 import pw.edu.watchin.server.service.resource.ResourceService;
 import pw.edu.watchin.server.service.security.SecurityService;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -68,7 +69,7 @@ public class VideoManagementService {
     }
 
     @Transactional
-    public VideoEditDTO fromStream(UUID streamId, MultipartFile file) throws IOException {
+    public VideoEditDTO fromStream(UUID streamId, File file) throws IOException {
         var stream = streamService.getStream(streamId, null);
         var video = videoProcessingService.fromStream(stream, file);
         return videoMapperService.mapEdit(video);

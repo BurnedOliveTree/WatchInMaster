@@ -1,6 +1,8 @@
 package pw.edu.watchin.server.web.stream;
 
+import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pw.edu.watchin.server.domain.video.VideoVisibilityType;
@@ -15,6 +17,7 @@ import pw.edu.watchin.server.security.AuthAccount;
 import pw.edu.watchin.server.service.video.StreamService;
 import pw.edu.watchin.server.service.video.VideoManagementService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -34,9 +37,18 @@ public class StreamManagementController {
     }
 
     // TODO add security
-    @PostMapping("/{id}")
-    public VideoEditDTO uploadStream(@PathVariable UUID id, @RequestPart MultipartFile video) throws IOException {
-        return videoManagementService.fromStream(id, video);
+    @PostMapping(value = "/upload", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public VideoEditDTO uploadStream(Request request) throws IOException, InterruptedException {
+        Process process = new ProcessBuilder("bash", "/tmp/recordings/script.sh", request.name, "/tmp/recordings").start();
+        process.waitFor();
+        return videoManagementService.fromStream(
+            UUID.fromString(request.name),
+            new File("/tmp/recordings/"+request.name+".mp4"));
+    }
+
+    @Value
+    static class Request {
+        String name;
     }
 
     @DeleteMapping("/{id}")

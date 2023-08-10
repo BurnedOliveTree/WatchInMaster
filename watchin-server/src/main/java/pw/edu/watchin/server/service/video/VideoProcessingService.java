@@ -15,6 +15,7 @@ import pw.edu.watchin.queue.template.QueueTemplate;
 import pw.edu.watchin.server.domain.channel.ChannelEntity;
 import pw.edu.watchin.server.domain.video.*;
 import pw.edu.watchin.server.exception.EntityNotFoundException;
+import pw.edu.watchin.server.repository.video.StreamRepository;
 import pw.edu.watchin.server.repository.video.VideoRepository;
 import pw.edu.watchin.server.repository.video.VideoResourceRepository;
 import pw.edu.watchin.server.repository.video.VideoTranscodingRepository;
@@ -57,6 +58,8 @@ public class VideoProcessingService {
 
     @Autowired
     private ApplicationProperties applicationProperties;
+    @Autowired
+    private StreamRepository streamRepository;
 
     public VideoEntity createVideo(ChannelEntity channel, MultipartFile file) throws IOException {
         var sourceFile = File.createTempFile(fileSystemProperties.getVideoSourceFilePrefix(), null);
@@ -83,14 +86,11 @@ public class VideoProcessingService {
         return video;
     }
 
-    public VideoEntity fromStream(StreamEntity stream, MultipartFile file) throws IOException {
-        var sourceFile = File.createTempFile(fileSystemProperties.getVideoSourceFilePrefix(), null);
-        file.transferTo(sourceFile);
-
+    public VideoEntity fromStream(StreamEntity stream, File file) throws IOException {
         var video = new VideoEntity();
         video.setTitle(stream.getTitle());
-        video.setLength(videoFileService.getDuration(sourceFile));
-        video.setThumbnail(resourceService.saveThumbnail(videoFileService.generateThumbnail(sourceFile)));
+        video.setLength(videoFileService.getDuration(file));
+        video.setThumbnail(resourceService.saveThumbnail(videoFileService.generateThumbnail(file)));
         video.setFrame(video.getThumbnail());
         video.setVisibility(stream.getVisibility());
         video.setStatus(VideoStatusType.PROCESSING);
@@ -99,13 +99,14 @@ public class VideoProcessingService {
         video.setUploaded(stream.getUploaded());
         // TODO transfer likes, favorites, watchLater etc
         videoRepository.saveAndFlush(video);
+        streamRepository.delete(stream);
 
-        var videoResolution = videoFileService.getResolution(sourceFile);
+        var videoResolution = videoFileService.getResolution(file);
         var defaultQuality = VideoQualityType.base(videoResolution.getFirst(), videoResolution.getSecond());
 
         var videoTranscodingProcess = new VideoTranscodingHash();
         videoTranscodingProcess.setVideoId(video.getId());
-        videoTranscodingProcess.setSourceLocation(sourceFile.getAbsolutePath());
+        videoTranscodingProcess.setSourceLocation(file.getAbsolutePath());
         enqueueTranscodingProcess(videoTranscodingProcess, defaultQuality);
 
         return video;
