@@ -31,7 +31,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-// TODO refactor
 @Service
 public class StreamService {
     @Autowired
@@ -53,7 +52,7 @@ public class StreamService {
         stream.setTitle(title);
         stream.setDescription(null);
         stream.setUploadUrl(rtmp);
-        stream.setWatchUrl(createHLS(stream.getId()));
+        stream.setWatchUrl(createDASH(stream.getId()));
         stream.setChannel(channelRepository.findByAccountId(account.getId())
             .orElseThrow(EntityNotFoundException::new));
         stream.setUploaded(LocalDateTime.now());
@@ -62,7 +61,7 @@ public class StreamService {
         stream.setVisibility(VideoVisibilityType.PRIVATE);
         stream.setThumbnail(defaultThumbnail());
         streamRepository.saveAndFlush(stream);
-        stream.setWatchUrl(createHLS(stream.getId()));
+        stream.setWatchUrl(createDASH(stream.getId()));
         streamRepository.saveAndFlush(stream);
         return streamMapperService.toEditable(stream);
     }
@@ -87,7 +86,6 @@ public class StreamService {
     @Transactional
     public void viewStream(UUID id, Account account) {
         streamRepository.updateViewCounter(id);
-        // TODO remove from watchLater
     }
 
     @Transactional
@@ -156,7 +154,6 @@ public class StreamService {
         return dash + "/" + id + ".mpd";
     }
 
-    // TODO move to config.yaml
     private static final String defaultThumbnail = "thumbnail.png";
     private static final String rtmp = "rtmp://192.168.0.156/live";
     private static final String hls = "http://192.168.0.156:8082/hls";
